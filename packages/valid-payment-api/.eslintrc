@@ -1,6 +1,6 @@
 
 {
-  "extends": "loopback,
+  "extends": "loopback",
   "env": {
         "browser": true,
         "es6": true,
