@@ -1,0 +1,15 @@
+{
+  "name": "sign-quote",
+  "version": "1.0.0",
+  "description": "sign messages defining a valid payment",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.3",
+    "web3": "^1.0.0-beta.36"
+  }
+}
