@@ -3,6 +3,8 @@ This repo contains a simple api used to issue signed messages that have payment 
 
 There is a contract that accepts payments should they match an accompanying signed payment message
 
+Payment Gas usage: 37025
+
 # Usage / Installation
 This repo can be used with testrpc or ganache
 
