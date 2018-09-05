@@ -26,7 +26,7 @@ contract('PaymentValidator', (accounts) => {
   it('should not be able to pay a wrong value', async () => {
     const signer = new SignerUtil(web3, accounts[1]);
     const invoice = await signer.makeInvoice(10);
-    const contract = await PaymentValidator.at(contractConfig.PaymentValidator);
+    const contract = await PaymentValidator.deployed();
     const { expiration, nonce, hash, v, r, s, amount } = invoice;
     try {
       const tx = await contract.pay(expiration, nonce, hash, v, r, s, {from: accounts[2], value: 1});
