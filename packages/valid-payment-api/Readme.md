@@ -35,9 +35,10 @@ Using network 'testrpc'.
 
   Contract: PaymentValidator
     ✓ should be able to generate an invoice
-    ✓ should be able to pay an invoice (68ms)
+    ✓ should be able to pay an invoice (47ms)
     ✓ should not be able to pay a wrong value
+    ✓ should trigger the PaymentAccepted event (53ms)
 
 
-  3 passing (140ms)
+  4 passing (177ms)
 ```
