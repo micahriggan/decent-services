@@ -14,31 +14,18 @@ contract PaymentValidator {
   }
 
   function isValidPayment(uint value, uint expiration, uint nonce, bytes32 hash, uint8 v, bytes32 r, bytes32 s) public view returns(bool valid) {
-    if(now > expiration) {
-      return false;
-    }
-    // amount, SPACE, expiration, SPACE, nonce
+    require(now <= expiration, "Payment is late");
     bytes memory prefix = "\x19Ethereum Signed Message:\n32";
     bytes32 ourHash = keccak256(abi.encodePacked(value, expiration, nonce));
     bytes32 payloadHash = keccak256(abi.encodePacked(prefix, ourHash));
-    if(ourHash != hash) {
-      return false;
-    }
-    return ecrecover(payloadHash, v, r, s) == quoteSigner;
+    require(ourHash == hash, "Hash mismatch");
+    require(ecrecover(payloadHash, v, r, s) == quoteSigner, "Signature mismatch for quote");
+    return true;
   }
 
   function pay(uint expiration, uint nonce, bytes32 hash, uint8 v, bytes32 r, bytes32 s) public payable {
-    if(now > expiration) {
-      revert("Payment is late");
-    }
-
-    // amount, SPACE, expiration, SPACE, nonce
-    bytes memory prefix = "\x19Ethereum Signed Message:\n32";
-    bytes32 payloadHash = keccak256(abi.encodePacked(prefix, msg.value, expiration, nonce));
-    if(payloadHash == hash && ecrecover(payloadHash, v, r, s) == quoteSigner) {
-      emit PaymentAccepted(payloadHash, now, msg.value);
-    } else {
-      revert("Invalid payload hash");
+    if(isValidPayment(msg.value, expiration, nonce, hash, v, r, s)) {
+      emit PaymentAccepted(hash, now, msg.value);
     }
   }
 
