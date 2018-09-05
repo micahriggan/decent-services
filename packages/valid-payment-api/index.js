@@ -4,7 +4,7 @@ const { Monitor } = require('./lib/monitor');
 
 const Web3 = require('web3');
 const web3Config = require('./constants/web3');
-const web3 = new Web3(new Web3.providers.HttpProvider(web3Config.url));
+const web3 = new Web3(new Web3.providers.WebsocketProvider(web3Config.url));
 const spec = require('./blockchain/build/contracts/PaymentValidator.json');
 const contracts = require('./constants/contracts');
 
@@ -24,7 +24,7 @@ web3.eth.getAccounts((err, accounts) => {
   const port = 3000;
   api.listen(port, () => {
     console.info(`Api listening on port ${port}`);
-    monitor.watchForPayment(PaymentValidator);
+    monitor.watchForPayment();
   });
 });
 

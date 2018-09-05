@@ -4,11 +4,11 @@ class Monitor {
   constructor(contract) {
     this.contract = contract;
   }
-  watchForPayment() {
-    console.info('Watching for payments...');
+  watchForPayment(cb) {
     var event = this.contract.events.PaymentAccepted({}, (err, resp) => {
+      if(err) return cb(err);
       if(!err) {
-        console.log('Payment Accepted', resp);
+        return cb(null, resp);
       }
     });
   }
