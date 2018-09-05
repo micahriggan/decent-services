@@ -15,10 +15,18 @@
 module.exports = {
   // See <http://truffleframework.com/docs/advanced/configuration>
   // to customize your Truffle configuration!
-  development: {
-    host: "localhost",
-    port: 8545,
-    network_id: "*",
-    gas: 3000000,
-  },
+  networks: {
+    ganache: {
+      host: "localhost",
+      port: 7545,
+      network_id: "5777",
+      gas: 3000000,
+    },
+    testrpc: {
+      host: "localhost",
+      port: 8545,
+      network_id: "*",
+      gas: 3000000,
+    }
+  }
 };

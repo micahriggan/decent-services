@@ -1,3 +1,3 @@
 module.exports = {
-  PaymentValidator: '0x24cf5b2a5d04f59ed50634e815497c4cb53b84d5'
+  PaymentValidator: '0x2436b53747f2e5b72595316795d22cc9c83c5984'
 }

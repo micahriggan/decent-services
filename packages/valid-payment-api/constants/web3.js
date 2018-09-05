@@ -1,1 +1,1 @@
-module.exports = { url: 'http://localhost:8545'};
+module.exports = { url: 'http://localhost:7545'};
