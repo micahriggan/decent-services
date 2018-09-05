@@ -20,3 +20,22 @@ This repo can be used with testrpc or ganache
   # Get an invoice payload
   curl http://localhost:3000/invoice/1
 ```
+
+
+# Tests
+
+```
+npm test
+
+Using network 'testrpc'.
+
+
+
+  Contract: PaymentValidator
+    ✓ should be able to generate an invoice
+    ✓ should be able to pay an invoice (68ms)
+    ✓ should not be able to pay a wrong value
+
+
+  3 passing (140ms)
+```
