@@ -15,9 +15,9 @@ web3.eth.getAccounts((err, accounts) => {
   const PaymentValidator = new web3.eth.Contract(spec.abi, contracts.PaymentValidator);
   const monitor = new Monitor(PaymentValidator);
 
-  api.get('/invoice/:usd', async (req, res) => {
+  api.get('/invoice/:wei', async (req, res) => {
     console.log('creating invoice');
-    const payload = await signer.makeInvoice(req.params.usd);
+    const payload = await signer.makeInvoice(req.params.wei);
     res.send(payload);
   });
 
