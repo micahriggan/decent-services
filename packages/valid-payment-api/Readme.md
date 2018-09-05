@@ -16,4 +16,7 @@ This repo can be used with testrpc or ganache
 
   # Terminal 3:  Rest API
   npm start
+
+  # Get an invoice payload
+  curl http://localhost:3000/invoice/1
 ```
