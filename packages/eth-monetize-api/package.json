@@ -1,0 +1,22 @@
+{
+  "name": "eth-monetize-api",
+  "version": "1.0.0",
+  "description": "backend for api monetization",
+  "main": "index.js",
+  "scripts": {
+    "start": "./start.sh",
+    "test": "cd ./blockchain/ && truffle test --network testrpc",
+    "testrpc": "./node_modules/.bin/ganache-cli"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "crypto-markets-client": "^1.0.0",
+    "express": "^4.16.3",
+    "web3": "^1.0.0-beta.36"
+  },
+  "devDependencies": {
+    "ganache-cli": "^6.1.8",
+    "truffle": "^4.1.14"
+  }
+}
