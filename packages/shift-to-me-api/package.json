@@ -1,7 +1,7 @@
 {
   "name": "shift-to-me-api",
   "version": "1.0.0",
-  "description": "Backend for shifttome",
+  "description": "Backend for shift-to-me",
   "keywords": [
     "loopback-application",
     "loopback"
