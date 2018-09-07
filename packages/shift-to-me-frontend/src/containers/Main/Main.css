@@ -1,0 +1,17 @@
+#MainContainer {
+  margin-top: 40px;
+}
+#MainContainer input {
+  text-align: center;
+}
+#MainContainer > .card {
+  width: 500px;
+  margin: 0 auto;
+  text-align: center;
+}
+#MainContainer .card-body {
+  padding: 15px; 
+}
+#MainContainer .card-body > * {
+  padding: 10px; 
+}
