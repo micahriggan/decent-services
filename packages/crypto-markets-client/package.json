@@ -1,0 +1,20 @@
+{
+  "name": "crypto-markets-client",
+  "version": "1.0.0",
+  "description": "the client for getting market data",
+  "main": "ts_build/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "ccxt": "^1.17.241",
+    "typescript": "^3.0.3"
+  },
+  "dependencies": {
+    "eth-monetize-api": "^1.0.0",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.2"
+  }
+}

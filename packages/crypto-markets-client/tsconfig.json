@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "noImplicitAny": false,
+      "removeComments": true,
+      "module": "commonjs",
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true,
+      "moduleResolution": "node",
+      "target": "es6",
+      "typeRoots": ["./node_modules/@types"],
+      "baseUrl": ".",
+      "paths": {
+        "*": ["*", "./src/*"]
+      },
+      "outDir": "ts_build",
+      "sourceMap": true
+  },
+    "include": [
+      "./src/**/*.ts",
+      "./tests/**/*.ts"
+    ],
+    "exclude": [
+      "node_modules"
+    ]
+}
