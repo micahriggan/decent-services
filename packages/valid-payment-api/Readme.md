@@ -20,7 +20,7 @@ This repo can be used with testrpc or ganache
   npm start
 
   # Get an invoice payload
-  curl http://localhost:3000/invoice/1
+  curl http://localhost:3000/quote/1
 ```
 
 
