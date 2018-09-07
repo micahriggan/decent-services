@@ -1,0 +1,6 @@
+{
+  "name": "db",
+  "connector": "memory",
+  "localStorage": "shifttome",
+  "file": "./storage.db"
+}
