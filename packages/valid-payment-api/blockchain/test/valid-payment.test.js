@@ -18,8 +18,8 @@ contract('PaymentValidator', (accounts) => {
     const signer = new SignerUtil(web3, accounts[1]);
     const invoice = await signer.makeInvoice(10);
     const contract = await PaymentValidator.deployed();
-    const { expiration, nonce, hash, v, r, s, amount } = invoice;
-    let tx = await contract.pay(expiration, nonce, hash, v, r, s, {from: accounts[2], value: 10});
+    const { expiration, payloadHash, hash, v, r, s, amount } = invoice;
+    let tx = await contract.pay(expiration, payloadHash, hash, v, r, s, {from: accounts[2], value: 10});
     assert(tx.logs[0].event === 'PaymentAccepted');
   });
 
@@ -27,9 +27,9 @@ contract('PaymentValidator', (accounts) => {
     const signer = new SignerUtil(web3, accounts[1]);
     const invoice = await signer.makeInvoice(10);
     const contract = await PaymentValidator.deployed();
-    const { expiration, nonce, hash, v, r, s, amount } = invoice;
+    const { expiration, payloadHash, hash, v, r, s, amount } = invoice;
     try {
-      const tx = await contract.pay(expiration, nonce, hash, v, r, s, {from: accounts[2], value: 1});
+      const tx = await contract.pay(expiration, payloadHash, hash, v, r, s, {from: accounts[2], value: 1});
       assert(tx == null, "This payment should have failed");
     } catch(err) {
       assert(err.message.includes('revert'), "This payment should fail");
@@ -50,8 +50,8 @@ contract('PaymentValidator', (accounts) => {
     });
 
     const invoice = await signer.makeInvoice(10);
-    const { expiration, nonce, hash, v, r, s, amount } = invoice;
-    let tx = await contract.pay(expiration, nonce, hash, v, r, s, {from: accounts[2], value: 10});
+    const { expiration, payloadHash, hash, v, r, s, amount } = invoice;
+    let tx = await contract.pay(expiration, payloadHash, hash, v, r, s, {from: accounts[2], value: 10});
     assert(tx.logs[0].event === 'PaymentAccepted');
 
     const payment = await PaymentEvent;
