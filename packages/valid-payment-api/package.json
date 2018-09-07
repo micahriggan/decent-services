@@ -1,5 +1,5 @@
 {
-  "name": "sign-quote",
+  "name": "valid-payment-api",
   "version": "1.0.0",
   "description": "sign messages defining a valid payment",
   "main": "index.js",
