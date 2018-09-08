@@ -1,0 +1,21 @@
+{
+  "name": "valid-payment-client",
+  "version": "1.0.0",
+  "description": "the client for using the valid-payment-api",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "crypto-markets-client": "^1.0.0",
+    "eth-monetize-api": "^1.0.0",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.2"
+  },
+  "devDependencies": {
+    "@types/request": "^2.47.1",
+    "@types/request-promise": "^4.1.42",
+    "typescript": "^3.0.3"
+  }
+}
