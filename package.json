@@ -1,0 +1,13 @@
+{
+  "name": "decent-services",
+  "description": "A bundle of micro services for DecentVentures",
+  "prettier": {
+    "printWidth": 120,
+    "singleQuote": true
+  },
+
+	"devDependencies": {
+		"lerna": "^2.9.1",
+    "prettier": "^1.14.2"
+	}
+}

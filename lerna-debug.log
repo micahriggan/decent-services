@@ -1,0 +1,16 @@
+0 silly input [ 'crypto-markets-client', 'packages/eth-monetize-api' ]
+1 silly flags { _: [ 'add' ],
+1 silly flags   'reject-cycles': false,
+1 silly flags   rejectCycles: false,
+1 silly flags   args: [ 'crypto-markets-client', 'packages/eth-monetize-api' ] }
+2 verbose rootPath /Users/micah/dev/decent-services
+3 info version 2.9.1
+4 silly isInitialized
+5 silly isInitialized true
+6 silly existsSync /Users/micah/dev/decent-services/VERSION
+7 silly initialize attempt
+8 error initialize callback with error
+9 error ParseError: Unexpected token G in JSON at position 0 in "https://registry.npmjs.org/packages%2Feth-monetize-api":
+9 error GET is not allowed...
+9 error     at stream.catch.then.data (/Users/micah/.nvm/versions/node/v8.9.4/lib/node_modules/lerna/node_modules/got/index.js:118:14)
+9 error     at <anonymous>
