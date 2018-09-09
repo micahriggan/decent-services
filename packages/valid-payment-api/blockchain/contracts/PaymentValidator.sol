@@ -24,9 +24,8 @@ contract PaymentValidator {
   }
 
   function pay(uint expiration, bytes32 payload, bytes32 hash, uint8 v, bytes32 r, bytes32 s) public payable {
-    if(isValidPayment(msg.value, expiration, payload, hash, v, r, s)) {
-      emit PaymentAccepted(hash, now, msg.value);
-    }
+    require(isValidPayment(msg.value, expiration, payload, hash, v, r, s));
+    emit PaymentAccepted(hash, now, msg.value);
   }
 
   modifier isAdmin() {
