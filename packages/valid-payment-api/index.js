@@ -15,10 +15,15 @@ web3.eth.getAccounts((err, accounts) => {
   const PaymentValidator = new web3.eth.Contract(spec.abi, contracts.PaymentValidator);
   const monitor = new Monitor(PaymentValidator);
 
+  api.get('/quote/:wei/:data', async (req, res) => {
+    console.log('creating invoice quote');
+    const payload = await signer.makeInvoice(req.params.wei, req.params.data);
+    res.send(payload);
+  });
+
   api.get('/quote/:wei', async (req, res) => {
     console.log('creating invoice quote');
-    console.log(req.query);
-    const payload = await signer.makeInvoice(req.params.wei, req.query);
+    const payload = await signer.makeInvoice(req.params.wei);
     res.send(payload);
   });
 

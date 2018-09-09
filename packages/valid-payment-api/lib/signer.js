@@ -19,6 +19,17 @@ class SignerUtil {
     ]
   }
 
+  createPayloadMessage({nonce, dataHash}) {
+    return [
+      {
+        t: 'uint', v: nonce
+      },
+      {
+        t: 'bytes32', v: dataHash
+      },
+    ]
+  }
+
   hashMessage(messageArr) {
     return this.web3.utils.soliditySha3(...messageArr);
   }
@@ -27,12 +38,15 @@ class SignerUtil {
     return this.web3.eth.sign(hash, this.signingAddress);
   }
 
-  async makeInvoice(usd, data = {}) {
+  async makeInvoice(usd, data = '') {
     const minutes = 60;
     const seconds = 60;
     const expiration = new Date().getTime() + 20 * minutes * seconds * 1000;
-    const payload = {nonce: Math.ceil(100000000000 * Math.random()).toString(), ...data};
-    const payloadHash =  this.web3.utils.sha3(JSON.stringify(payload));
+    const nonce = Math.ceil(100000000000 * Math.random()).toString()
+    const dataHash = this.web3.utils.keccak256(data || nonce);
+    const payload = {nonce, dataHash};
+    const payloadMsg = this.createPayloadMessage(payload);
+    const payloadHash = this.hashMessage(payloadMsg);
     const amount = 1 * usd;
     const message = this.createMessage({amount, expiration, payloadHash});
     const hash = this.hashMessage(message);

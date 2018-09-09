@@ -13,8 +13,11 @@ api.get('/quote-calls/:calls/:costPerCall', async (req, res) => {
   const [ etherTicker ] = await priceClient.getTickerForExchange('ETH_USD', 'bittrex');
   const usdPerEth = etherTicker.ticker.bid;
   const totalEther = totalUsd / usdPerEth;
-  res.send({ totalEther, totalUsd });
+
+  const signedQuote = await paymentClient.getQuote(totalEther, callCount);
+  res.json({ totalEther, totalUsd, signedQuote });
 });
+
 
 const port = 3000;
 api.listen(port, () => {

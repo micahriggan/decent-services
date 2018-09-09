@@ -13,9 +13,10 @@ contract ApiMonetization {
     validator = PaymentValidator(paymentVerifier);
   }
 
-  function purchaseApiCalls(address signingKey,  uint numCalls, uint expiration, bytes32 payload, bytes32 hash, uint8 v, bytes32 r, bytes32 s) public payable {
-    // need to check H(nonce, numCalls) = payload
-    validator.pay(expiration, payload, hash, uint8 v, bytes32 r, bytes32 s);
+  function purchaseApiCalls(address signingKey,  uint numCalls, uint nonce, uint expiration, bytes32 payload, bytes32 hash, uint8 v, bytes32 r, bytes32 s) public payable {
+    bytes32 ourHash = keccak256(abi.encodePacked(nonce, numCalls))
+    require(payload == ourHash, "Mismatch between hash of number of calls and user input")
+    validator.pay(expiration, payload, hash, v, r, s);
     purchases[signingKey] = numCalls;
   }
 }
