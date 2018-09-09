@@ -1,13 +1,15 @@
 {
   "compilerOptions": {
-    "lib": ["es2017"],
+    "lib": ["es5", "es6"],
     "noImplicitAny": false,
     "removeComments": true,
+    "declaration": true,
     "module": "commonjs",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "moduleResolution": "node",
-    "target": "es6",
+    "esModuleInterop": true,
+    "target": "es5",
     "typeRoots": ["./node_modules/@types"],
     "baseUrl": ".",
     "paths": {

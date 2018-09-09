@@ -22,7 +22,7 @@ web3.eth.getAccounts((err, accounts) => {
     res.send(payload);
   });
 
-  const port = 3000;
+  const port = 5000;
   api.listen(port, () => {
     console.info(`Api listening on port ${port}`);
     monitor.watchForPayment();

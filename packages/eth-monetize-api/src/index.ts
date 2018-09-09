@@ -1,27 +1,22 @@
-import * as paymentClient from 'valid-payment-client';
-const express = require('express');
-const Web3 = require('web3');
-const web3Config = require('./constants/web3');
-const web3 = new Web3(new Web3.providers.WebsocketProvider(web3Config.url));
-const spec = require('./blockchain/build/contracts/PaymentValidator.json');
-const contracts = require('./constants/contracts');
+import { CryptoMarketsClient } from 'crypto-markets-client';
+import { ValidPaymentClient } from 'valid-payment-client';
+import express = require('express');
 
 const api = express();
 
-web3.eth.getAccounts((err, accounts) => {
-
-  api.post('/calls', async (req, res) => {
-    const callCount = req.body.callCount;
-
-    // calculate cost per call
-    const costPerCall = 1;
-    res.send(payload);
-  });
-
-  const port = 3000;
-  api.listen(port, () => {
-    console.info(`Api listening on port ${port}`);
-    monitor.watchForPayment();
-  });
+api.get('/quote-calls/:calls/:costPerCall', async (req, res) => {
+  const callCount = req.params.calls;
+  const priceClient = new CryptoMarketsClient('http://localhost:4000');
+  const paymentClient = new ValidPaymentClient('http://localhost:5000');
+  const usdPerCall = req.params.costPerCall;
+  const totalUsd = usdPerCall * callCount;
+  const [ etherTicker ] = await priceClient.getTickerForExchange('ETH_USD', 'bittrex');
+  const usdPerEth = etherTicker.ticker.bid;
+  const totalEther = totalUsd / usdPerEth;
+  res.send({ totalEther, totalUsd });
 });
 
+const port = 3000;
+api.listen(port, () => {
+  console.info(`Api listening on port ${port}`);
+});

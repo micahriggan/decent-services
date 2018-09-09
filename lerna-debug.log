@@ -1,16 +1,20 @@
-0 silly input [ 'crypto-markets-client', 'packages/eth-monetize-api' ]
-1 silly flags { _: [ 'add' ],
+0 silly input [ '../../backup/shift-to-me-api/' ]
+1 silly flags { _: [ 'import' ],
 1 silly flags   'reject-cycles': false,
 1 silly flags   rejectCycles: false,
-1 silly flags   args: [ 'crypto-markets-client', 'packages/eth-monetize-api' ] }
+1 silly flags   pathToRepo: '../../backup/shift-to-me-api/' }
 2 verbose rootPath /Users/micah/dev/decent-services
 3 info version 2.9.1
 4 silly isInitialized
 5 silly isInitialized true
 6 silly existsSync /Users/micah/dev/decent-services/VERSION
 7 silly initialize attempt
-8 error initialize callback with error
-9 error ParseError: Unexpected token G in JSON at position 0 in "https://registry.npmjs.org/packages%2Feth-monetize-api":
-9 error GET is not allowed...
-9 error     at stream.catch.then.data (/Users/micah/.nvm/versions/node/v8.9.4/lib/node_modules/lerna/node_modules/got/index.js:118:14)
-9 error     at <anonymous>
+8 silly statSync /Users/micah/dev/backup/shift-to-me-api
+9 silly getWorkspaceRoot
+10 verbose getWorkspaceRoot /Users/micah/dev/decent-services
+11 silly existsSync /Users/micah/dev/decent-services/packages/shift-to-me-api
+12 silly getCurrentSHA
+13 verbose getCurrentSHA aa61fc4983e4e9e8c665188ec8f3244a854d2bbe
+14 error initialize callback with error
+15 error Error: Local repository has un-committed changes
+15 error     at ImportCommand.initialize (/Users/micah/.nvm/versions/node/v8.9.4/lib/node_modules/lerna/lib/commands/ImportCommand.js:158:25)

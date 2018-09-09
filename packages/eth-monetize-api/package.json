@@ -4,19 +4,23 @@
   "description": "backend for api monetization",
   "main": "index.js",
   "scripts": {
-    "start": "./start.sh",
+    "start": "npm run compile && ./start.sh",
+    "compile": "./node_modules/.bin/tsc",
     "test": "cd ./blockchain/ && truffle test --network testrpc",
     "testrpc": "./node_modules/.bin/ganache-cli"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "crypto-markets-client": "^1.0.0",
+    "crypto-markets-client": "1.0.0",
     "express": "^4.16.3",
+    "valid-payment-client": "1.0.0",
     "web3": "^1.0.0-beta.36"
   },
   "devDependencies": {
+    "@types/express": "^4.16.0",
     "ganache-cli": "^6.1.8",
-    "truffle": "^4.1.14"
+    "truffle": "^4.1.14",
+    "typescript": "^3.0.3"
   }
 }

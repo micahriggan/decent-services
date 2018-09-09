@@ -5,8 +5,6 @@
   "dependencies": {
     "bootstrap": "^4.0.0-alpha.6",
     "clipboard-js": "^0.3.6",
-    "crypto-markets-client": "^1.0.0",
-    "eth-monetize-api": "^1.0.0",
     "halogenium": "^2.2.3",
     "history": "^4.7.2",
     "jquery": "^3.3.1",
@@ -17,6 +15,7 @@
   },
   "scripts": {
     "start": "react-scripts-ts start",
+    "compile":"./node_modules/.bin/tsc",
     "build": "react-scripts-ts build",
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject"
