@@ -54,8 +54,6 @@
     "@loopback/openapi-v3": "^0.12.2",
     "@loopback/repository": "^0.14.2",
     "@loopback/rest": "^0.19.2",
-    "crypto-markets-client": "^1.0.0",
-    "eth-monetize-api": "^1.0.0",
     "request": "^2.87.0"
   },
   "devDependencies": {
