@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/web3": "^1.0.3",
     "crypto-markets-client": "1.0.0",
     "express": "^4.16.3",
     "valid-payment-client": "1.0.0",

@@ -19,13 +19,13 @@ class SignerUtil {
     ]
   }
 
-  createPayloadMessage({nonce, dataHash}) {
+  createPayloadMessage({nonce, dataStr}) {
     return [
       {
         t: 'uint', v: nonce
       },
       {
-        t: 'bytes32', v: dataHash
+        t: 'string', v: dataStr
       },
     ]
   }
@@ -38,16 +38,18 @@ class SignerUtil {
     return this.web3.eth.sign(hash, this.signingAddress);
   }
 
-  async makeInvoice(usd, data = '') {
+  async makeInvoice(wei, data = '') {
+
+    const nonce = Math.ceil(100000000000 * Math.random())
+    const dataStr = parseInt(data, 10).toString();
+    const payload = {nonce, dataStr};
+    const payloadMsg = this.createPayloadMessage(payload);
+    const payloadHash = this.hashMessage(payloadMsg);
+
     const minutes = 60;
     const seconds = 60;
     const expiration = new Date().getTime() + 20 * minutes * seconds * 1000;
-    const nonce = Math.ceil(100000000000 * Math.random()).toString()
-    const dataHash = this.web3.utils.keccak256(data || nonce);
-    const payload = {nonce, dataHash};
-    const payloadMsg = this.createPayloadMessage(payload);
-    const payloadHash = this.hashMessage(payloadMsg);
-    const amount = 1 * usd;
+    const amount = wei;
     const message = this.createMessage({amount, expiration, payloadHash});
     const hash = this.hashMessage(message);
     const signedHash = await this.signHash(hash);

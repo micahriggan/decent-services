@@ -1,23 +1,15 @@
-import { CryptoMarketsClient } from 'crypto-markets-client';
-import { ValidPaymentClient } from 'valid-payment-client';
 import express = require('express');
+import { MonetizationService } from './services/monetization';
 
 const api = express();
 
 api.get('/quote-calls/:calls/:costPerCall', async (req, res) => {
-  const callCount = req.params.calls;
-  const priceClient = new CryptoMarketsClient('http://localhost:4000');
-  const paymentClient = new ValidPaymentClient('http://localhost:5000');
-  const usdPerCall = req.params.costPerCall;
-  const totalUsd = usdPerCall * callCount;
-  const [ etherTicker ] = await priceClient.getTickerForExchange('ETH_USD', 'bittrex');
-  const usdPerEth = etherTicker.ticker.bid;
-  const totalEther = totalUsd / usdPerEth;
-
-  const signedQuote = await paymentClient.getQuote(totalEther, callCount);
+  const { totalEther, totalUsd, signedQuote } = await MonetizationService.getQuoteForApiCalls(
+    req.params.calls,
+    req.params.costPerCall
+  );
   res.json({ totalEther, totalUsd, signedQuote });
 });
-
 
 const port = 3000;
 api.listen(port, () => {

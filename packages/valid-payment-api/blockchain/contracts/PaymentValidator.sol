@@ -24,7 +24,7 @@ contract PaymentValidator {
   }
 
   function pay(uint expiration, bytes32 payload, bytes32 hash, uint8 v, bytes32 r, bytes32 s) public payable {
-    require(isValidPayment(msg.value, expiration, payload, hash, v, r, s));
+    require(isValidPayment(msg.value, expiration, payload, hash, v, r, s), 'Only accept valid payments');
     emit PaymentAccepted(hash, now, msg.value);
   }
 
