@@ -12,13 +12,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/web3": "^1.0.3",
     "crypto-markets-client": "1.0.0",
     "express": "^4.16.3",
     "valid-payment-client": "1.0.0",
     "web3": "^1.0.0-beta.36"
   },
   "devDependencies": {
+    "@types/web3": "^1.0.3",
     "@types/express": "^4.16.0",
     "ganache-cli": "^6.1.8",
     "truffle": "^4.1.14",

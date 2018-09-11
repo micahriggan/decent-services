@@ -4,7 +4,7 @@
   "description": "using ccxt to get price averages",
   "main": "index.js",
   "scripts": {
-    "start": "npm run tsc && node ./ts_build/index.js",
+    "start": "npm run compile && node ./ts_build/index.js",
     "compile": "./node_modules/.bin/tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -14,7 +14,7 @@ export class ShiftToMeService {
   static async getAddressInputs(addr: string) {
     return new Promise<DestinationAddress>((resolve, reject) => {
       request.get(
-        `http://www.localhost:3000/destination/${addr}`,
+        `http://www.localhost:3005/destination/${addr}`,
         (err, httpResponse, body) => {
           const json = JSON.parse(body);
           const { inputs, currency, address } = json;

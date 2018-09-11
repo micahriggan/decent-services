@@ -1,20 +1,24 @@
-0 silly input [ '../../backup/shift-to-me-api/' ]
-1 silly flags { _: [ 'import' ],
+0 silly input [ 'npm', 'start' ]
+1 silly flags { _: [ 'exec' ],
 1 silly flags   'reject-cycles': false,
 1 silly flags   rejectCycles: false,
-1 silly flags   pathToRepo: '../../backup/shift-to-me-api/' }
+1 silly flags   parallel: true,
+1 silly flags   command: 'npm',
+1 silly flags   args: [ 'start' ] }
 2 verbose rootPath /Users/micah/dev/decent-services
 3 info version 2.9.1
-4 silly isInitialized
-5 silly isInitialized true
-6 silly existsSync /Users/micah/dev/decent-services/VERSION
-7 silly initialize attempt
-8 silly statSync /Users/micah/dev/backup/shift-to-me-api
-9 silly getWorkspaceRoot
-10 verbose getWorkspaceRoot /Users/micah/dev/decent-services
-11 silly existsSync /Users/micah/dev/decent-services/packages/shift-to-me-api
-12 silly getCurrentSHA
-13 verbose getCurrentSHA aa61fc4983e4e9e8c665188ec8f3244a854d2bbe
-14 error initialize callback with error
-15 error Error: Local repository has un-committed changes
-15 error     at ImportCommand.initialize (/Users/micah/.nvm/versions/node/v8.9.4/lib/node_modules/lerna/lib/commands/ImportCommand.js:158:25)
+4 silly existsSync /Users/micah/dev/decent-services/VERSION
+5 silly initialize attempt
+6 silly initialize success
+7 silly execute attempt
+8 info exec in 7 package(s): npm start
+9 error execute callback with error
+10 error Error: Command failed: npm start
+10 error npm ERR! missing script: start
+10 error
+10 error npm ERR! A complete log of this run can be found in:
+10 error npm ERR!     /Users/micah/.npm/_logs/2018-09-10T23_20_30_064Z-debug.log
+10 error
+10 error
+10 error     at Promise.all.then.arr (/Users/micah/.nvm/versions/node/v8.9.4/lib/node_modules/lerna/node_modules/execa/index.js:236:11)
+10 error     at <anonymous>

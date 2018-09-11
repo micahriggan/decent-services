@@ -1,28 +1,26 @@
-import { ApplicationConfig } from "@loopback/core";
-import { RestApplication, RestServer, RestBindings } from "@loopback/rest";
-import { MySequence } from "./sequence";
+import { ApplicationConfig } from '@loopback/core';
+import { RestApplication, RestServer, RestBindings } from '@loopback/rest';
+import { MySequence } from './sequence';
 
 /* tslint:disable:no-unused-variable */
 // Binding and Booter imports are required to infer types for BootMixin!
-import { BootMixin, Booter, Binding } from "@loopback/boot";
-import {
-  Class,
-  Repository,
-  juggler,
-  RepositoryMixin
-} from "@loopback/repository";
+import { BootMixin, Booter, Binding } from '@loopback/boot';
+import { Class, Repository, juggler, RepositoryMixin } from '@loopback/repository';
 /* tslint:enable:no-unused-variable */
 
-import { DbDataSource } from "./datasources/db.datasource";
-import { DestinationAddressRepository } from "./repositories/destination-address.repo";
-import { InputAddressRepository } from "./repositories/input-address.repo";
-import { ShiftAttemptRepository } from "./repositories/shift-attempt.repo";
+import { DbDataSource } from './datasources/db.datasource';
+import { DestinationAddressRepository } from './repositories/destination-address.repo';
+import { InputAddressRepository } from './repositories/input-address.repo';
+import { ShiftAttemptRepository } from './repositories/shift-attempt.repo';
 
-export class ShifttomeApplication extends BootMixin(
-  RepositoryMixin(RestApplication)
-) {
+export class ShifttomeApplication extends BootMixin(RepositoryMixin(RestApplication)) {
   constructor(options?: ApplicationConfig) {
-    super(options);
+    super({
+      ...options,
+      rest: {
+        port: 3005
+      }
+    });
 
     // Set up the custom sequence
     this.sequence(MySequence);
@@ -32,8 +30,8 @@ export class ShifttomeApplication extends BootMixin(
     this.bootOptions = {
       controllers: {
         // Customize ControllerBooter Conventions here
-        dirs: ["controllers"],
-        extensions: [".controller.js"],
+        dirs: ['controllers'],
+        extensions: ['.controller.js'],
         nested: true
       }
     };
@@ -43,9 +41,7 @@ export class ShifttomeApplication extends BootMixin(
     // This will allow you to test your application without needing to
     //     // use a "real" datasource!
     const datasource =
-      this.options && this.options.datasource
-        ? new juggler.DataSource(this.options.datasource)
-        : DbDataSource;
+      this.options && this.options.datasource ? new juggler.DataSource(this.options.datasource) : DbDataSource;
     this.dataSource(datasource);
   }
 
