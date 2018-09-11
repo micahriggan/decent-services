@@ -1,15 +1,17 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    return __assign.apply(this, arguments);
-};
+})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -45,72 +47,33 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-}
 Object.defineProperty(exports, "__esModule", { value: true });
 var request = require("request-promise");
-exports.EnvConstants = {
-    web3: { url: 'http://localhost:8545' },
-    DECENT_ENV_PORT: process.env.DECENT_ENV_PORT || 5555,
-    DECENT_ENV_HOST: process.env.DECENT_ENV_HOST || 'http://localhost'
-};
-var defaultUrl = exports.EnvConstants.DECENT_ENV_HOST + ':' + exports.EnvConstants.DECENT_ENV_PORT;
-var DecentEnvClient = (function () {
-    function DecentEnvClient(url) {
-        if (url === void 0) { url = defaultUrl; }
-        this.url = url;
+var decent_env_client_1 = require("decent-env-client");
+var EthMonetizeClient = (function (_super) {
+    __extends(EthMonetizeClient, _super);
+    function EthMonetizeClient(url) {
+        return _super.call(this, url, 'eth-monetize-api') || this;
     }
-    DecentEnvClient.prototype.register = function (service) {
+    EthMonetizeClient.prototype.getQuote = function (calls, costPerCall) {
         return __awaiter(this, void 0, void 0, function () {
-            var waiting, ping, e_1, resp;
+            var url, resp;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        waiting = true;
-                        _a.label = 1;
+                    case 0: return [4, this.getUrl()];
                     case 1:
-                        if (!waiting) return [3, 6];
-                        _a.label = 2;
+                        url = _a.sent();
+                        return [4, request.get(url + ("/quote-calls/" + calls + "/" + costPerCall), {
+                                json: true
+                            })];
                     case 2:
-                        _a.trys.push([2, 4, , 5]);
-                        console.log('waiting for service registry to come up @ ', this.url);
-                        return [4, request.get(this.url + '/ping')];
-                    case 3:
-                        ping = _a.sent();
-                        waiting = false;
-                        return [3, 5];
-                    case 4:
-                        e_1 = _a.sent();
-                        console.log('still waiting for service registry to come up @ ', this.url);
-                        return [3, 5];
-                    case 5: return [3, 1];
-                    case 6: return [4, request.post(this.url + "/service", {
-                            body: __assign({}, service),
-                            json: true
-                        })];
-                    case 7:
-                        resp = _a.sent();
-                        return [2, resp];
-                }
-            });
-        });
-    };
-    DecentEnvClient.prototype.get = function (serviceName) {
-        return __awaiter(this, void 0, void 0, function () {
-            var resp;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4, request.get(this.url + ("/service/" + serviceName))];
-                    case 1:
                         resp = _a.sent();
                         return [2, JSON.parse(resp)];
                 }
             });
         });
     };
-    return DecentEnvClient;
-}());
-exports.DecentEnvClient = DecentEnvClient;
-__export(require("./base"));
+    return EthMonetizeClient;
+}(decent_env_client_1.BaseClient));
+exports.EthMonetizeClient = EthMonetizeClient;
 //# sourceMappingURL=index.js.map

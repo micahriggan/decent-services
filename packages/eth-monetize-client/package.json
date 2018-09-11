@@ -5,6 +5,7 @@
   "main": "./ts_build/index.js",
   "types": "./ts_build/index.d.ts",
   "scripts": {
+    "compile": "./node_modules/.bin/tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Micah Riggan",
@@ -12,11 +13,11 @@
   "dependencies": {
     "request": "^2.88.0",
     "request-promise": "^4.2.2",
-    "decent-env-client": "1.0.0",
-    "typescript": "^3.0.3"
+    "decent-env-client": "1.0.0"
   },
   "devDependencies": {
     "@types/request": "^2.47.1",
-    "@types/request-promise": "^4.1.42"
+    "@types/request-promise": "^4.1.42",
+    "typescript": "^3.0.3"
   }
 }

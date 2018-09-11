@@ -43,3 +43,4 @@ export class DecentEnvClient {
     return JSON.parse(resp) as Service;
   }
 }
+export * from './base';

@@ -18,3 +18,4 @@ export declare class DecentEnvClient {
     register(service: Service): Promise<Service>;
     get(serviceName: string): Promise<Service>;
 }
+export * from './base';

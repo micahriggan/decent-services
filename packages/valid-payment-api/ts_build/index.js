@@ -52,7 +52,6 @@ web3.eth.getAccounts(function (err, accounts) { return __awaiter(_this, void 0, 
         switch (_a.label) {
             case 0:
                 signer = new signer_1.SignerUtil(web3, accounts[1]);
-                web3.eth.net.getId(console.log);
                 return [4, decent_smart_contracts_1.SmartContracts.PaymentValidator.getFor(web3)];
             case 1:
                 data = _a.sent();
