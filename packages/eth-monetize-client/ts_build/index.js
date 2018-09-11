@@ -53,7 +53,7 @@ var decent_env_client_1 = require("decent-env-client");
 var EthMonetizeClient = (function (_super) {
     __extends(EthMonetizeClient, _super);
     function EthMonetizeClient(url) {
-        return _super.call(this, url, 'eth-monetize-api') || this;
+        return _super.call(this, 'eth-monetize-api', url) || this;
     }
     EthMonetizeClient.prototype.getQuote = function (calls, costPerCall) {
         return __awaiter(this, void 0, void 0, function () {

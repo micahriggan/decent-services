@@ -4,7 +4,7 @@ export class BaseClient {
   private servicePromise: Promise<Service>;
   private service: Service;
 
-  constructor(envUrl, private serviceName) {
+  constructor(private serviceName, envUrl?: string) {
     this.envClient = new DecentEnvClient(envUrl);
     this.servicePromise = this.envClient.get(this.serviceName);
   }

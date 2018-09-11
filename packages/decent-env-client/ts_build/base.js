@@ -37,7 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var _1 = require(".");
 var BaseClient = (function () {
-    function BaseClient(envUrl, serviceName) {
+    function BaseClient(serviceName, envUrl) {
         this.serviceName = serviceName;
         this.envClient = new _1.DecentEnvClient(envUrl);
         this.servicePromise = this.envClient.get(this.serviceName);

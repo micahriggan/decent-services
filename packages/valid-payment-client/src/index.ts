@@ -1,3 +1,4 @@
+import { BaseClient } from 'decent-env-client';
 import * as request from 'request-promise';
 type QuoteResponse = {
   hash: string;
@@ -11,10 +12,13 @@ type QuoteResponse = {
   s: string;
 };
 
-export class ValidPaymentClient {
-  constructor(private url) {}
+export class ValidPaymentClient extends BaseClient {
+  constructor(url?: string) {
+    super('valid-payment-api', url);
+  }
   async getQuote(wei, data?) {
-    let url = `${this.url}/quote/${wei}`;
+    const base = await this.getUrl();
+    let url = `${base}/quote/${wei}`;
     if (data) {
       url += `/${data}`;
     }

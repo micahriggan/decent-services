@@ -3,6 +3,6 @@ export declare class BaseClient {
     private envClient;
     private servicePromise;
     private service;
-    constructor(envUrl: any, serviceName: any);
+    constructor(serviceName: any, envUrl?: string);
     getUrl(): Promise<string>;
 }

@@ -10,7 +10,7 @@ export type ApiPurchaseQuote = {
 
 export class EthMonetizeClient extends BaseClient {
   constructor(url: string) {
-    super(url, 'eth-monetize-api'); 
+    super('eth-monetize-api', url);
   }
 
   async getQuote(calls: number, costPerCall: number) {
