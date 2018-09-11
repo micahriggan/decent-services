@@ -6,6 +6,7 @@
   "types": "./ts_build/index.d.ts",
   "scripts": {
     "compile": "./node_modules/.bin/tsc",
+    "start": "npm run compile && node ./ts_build/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Micah Riggan",

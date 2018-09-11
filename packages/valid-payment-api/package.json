@@ -4,7 +4,8 @@
   "description": "sign messages defining a valid payment",
   "main": "index.js",
   "scripts": {
-    "start": "./start.sh",
+    "start": "npm run compile && node ./ts_build/index.js",
+    "compile": "./node_modules/.bin/tsc",
     "test": "cd ./blockchain/ && truffle test --network testrpc",
     "testrpc": "./node_modules/.bin/ganache-cli"
   },
@@ -12,11 +13,15 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.16.3",
+    "decent-env-client": "1.0.0",
+    "decent-smart-contracts": "1.0.0",
     "web3": "^1.0.0-beta.36"
   },
   "devDependencies": {
+    "@types/web3": "^1.0.4",
     "ganache-cli": "^6.1.8",
     "prettier": "^1.14.2",
-    "truffle": "^4.1.14"
+    "truffle": "^4.1.14",
+    "typescript": "^3.0.3"
   }
 }

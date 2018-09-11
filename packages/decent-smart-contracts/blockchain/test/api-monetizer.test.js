@@ -1,10 +1,9 @@
 const ApiMonetization = artifacts.require('../contracts/ApiMonetization.sol');
 const spec = require('../build/contracts/ApiMonetization.json');
 const Web3 = require('web3');
-const { MonetizationService } = require('../../ts_build/services/monetization');
+const { EthMonetizeClient } = require('eth-monetize-client');
 const { EnvConstants } = require('decent-env-client');
-const { ValidPaymentClient } = require('valid-payment-client');
-const validPaymentClient = new ValidPaymentClient();
+const monetizeClient = new EthMonetizeClient();
 const web3 = new Web3(new Web3.providers.WebsocketProvider(EnvConstants.web3.url));
 
 
@@ -16,7 +15,7 @@ contract('ApiMonetization', (accounts) => {
   const signingKey = accounts[3];
 
   it(`should be able to get a signed quote for ${purchaseAmount} api calls`, async () => {
-    let { totalEther, totalUsd, signedQuote } = await MonetizationService.getQuoteForApiCalls(
+    let { totalEther, totalUsd, signedQuote } = await monetizeClient.getQuote(
       purchaseAmount,
       1
     );
@@ -25,7 +24,7 @@ contract('ApiMonetization', (accounts) => {
   });
 
   it('should be able to purchase the api calls', async () => {
-    let { totalEther, totalWei, totalUsd, signedQuote } = await MonetizationService.getQuoteForApiCalls(
+    let { totalEther, totalWei, totalUsd, signedQuote } = await monetizeClient.getQuote(
       purchaseAmount,
       1
     );

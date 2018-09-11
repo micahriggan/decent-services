@@ -34,49 +34,32 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
-var express = require("express");
-var decent_env_client_1 = require("decent-env-client");
-var service_provider_1 = require("./services/service-provider");
-var app = express();
-app.use(express.json());
-var provider = new service_provider_1.DecentEnvProvider();
-app.get('/ping', function (req, res) {
-    res.send({ msg: 'pong' });
-});
-app.get('/service/:serviceName', function (req, res) {
-    var serviceName = req.params.serviceName;
-    var payload = provider.get(serviceName);
-    res.send(payload);
-});
-app.post('/service', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-    var _a, name, url, port, data, payload;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
-            case 0:
-                _a = req.body, name = _a.name, url = _a.url, port = _a.port, data = _a.data;
-                return [4, provider.register({ name: name, url: url, port: port, data: data })];
-            case 1:
-                payload = _b.sent();
-                res.send(payload);
-                return [2];
-        }
-    });
-}); });
-var port = decent_env_client_1.EnvConstants.DECENT_ENV_PORT;
-app.listen(port, function () { return __awaiter(_this, void 0, void 0, function () {
-    var env, service;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                env = new decent_env_client_1.DecentEnvClient();
-                return [4, env.register({ name: 'services', port: port, host: decent_env_client_1.EnvConstants.DECENT_ENV_HOST })];
-            case 1:
-                service = _a.sent();
-                console.log("App listening on port " + service.port + " ");
-                return [2];
-        }
-    });
-}); });
-//# sourceMappingURL=index.js.map
+var _1 = require(".");
+var BaseClient = (function () {
+    function BaseClient(envUrl, serviceName) {
+        this.serviceName = serviceName;
+        this.envClient = new _1.DecentEnvClient(envUrl);
+        this.servicePromise = this.envClient.get(this.serviceName);
+    }
+    BaseClient.prototype.getUrl = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        if (!(!this.service && this.servicePromise)) return [3, 2];
+                        _a = this;
+                        return [4, this.servicePromise];
+                    case 1:
+                        _a.service = _b.sent();
+                        _b.label = 2;
+                    case 2: return [2, this.service.url];
+                }
+            });
+        });
+    };
+    return BaseClient;
+}());
+exports.BaseClient = BaseClient;
+//# sourceMappingURL=base.js.map

@@ -38,43 +38,60 @@ var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
 var decent_env_client_1 = require("decent-env-client");
-var service_provider_1 = require("./services/service-provider");
-var app = express();
-app.use(express.json());
-var provider = new service_provider_1.DecentEnvProvider();
-app.get('/ping', function (req, res) {
-    res.send({ msg: 'pong' });
-});
-app.get('/service/:serviceName', function (req, res) {
-    var serviceName = req.params.serviceName;
-    var payload = provider.get(serviceName);
-    res.send(payload);
-});
-app.post('/service', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-    var _a, name, url, port, data, payload;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
-            case 0:
-                _a = req.body, name = _a.name, url = _a.url, port = _a.port, data = _a.data;
-                return [4, provider.register({ name: name, url: url, port: port, data: data })];
-            case 1:
-                payload = _b.sent();
-                res.send(payload);
-                return [2];
-        }
-    });
-}); });
-var port = decent_env_client_1.EnvConstants.DECENT_ENV_PORT;
-app.listen(port, function () { return __awaiter(_this, void 0, void 0, function () {
-    var env, service;
+var signer_1 = require("./lib/signer");
+var monitor_1 = require("./lib/monitor");
+var decent_smart_contracts_1 = require("decent-smart-contracts");
+var Web3 = require("web3");
+var web3 = new Web3(new Web3.providers.WebsocketProvider(decent_env_client_1.EnvConstants.web3.url));
+var api = express();
+var env = new decent_env_client_1.DecentEnvClient();
+web3.eth.getAccounts(function (err, accounts) { return __awaiter(_this, void 0, void 0, function () {
+    var signer, data, PaymentValidator, monitor;
+    var _this = this;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                env = new decent_env_client_1.DecentEnvClient();
-                return [4, env.register({ name: 'services', port: port, host: decent_env_client_1.EnvConstants.DECENT_ENV_HOST })];
+                signer = new signer_1.SignerUtil(web3, accounts[1]);
+                web3.eth.net.getId(console.log);
+                return [4, decent_smart_contracts_1.SmartContracts.PaymentValidator.getFor(web3)];
             case 1:
-                service = _a.sent();
-                console.log("App listening on port " + service.port + " ");
+                data = _a.sent();
+                PaymentValidator = new web3.eth.Contract(data.abi, data.address);
+                monitor = new monitor_1.Monitor(PaymentValidator);
+                api.get('/quote/:wei/:data', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+                    var payload;
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0:
+                                console.log('creating invoice quote');
+                                return [4, signer.makeInvoice(req.params.wei, req.params.data)];
+                            case 1:
+                                payload = _a.sent();
+                                res.send(payload);
+                                return [2];
+                        }
+                    });
+                }); });
+                api.get('/quote/:wei', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+                    var payload;
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0:
+                                console.log('creating invoice quote');
+                                return [4, signer.makeInvoice(req.params.wei)];
+                            case 1:
+                                payload = _a.sent();
+                                res.send(payload);
+                                return [2];
+                        }
+                    });
+                }); });
+                env.register({ name: 'valid-payments-api' }).then(function (service) {
+                    api.listen(service.port, function () {
+                        console.info("Api listening on port " + service.port);
+                        monitor.watchForPayment(console.log);
+                    });
+                });
                 return [2];
         }
     });

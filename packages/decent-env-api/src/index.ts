@@ -1,42 +1,32 @@
-import portFinder = require('portfinder');
 import express = require('express');
 import { Service } from 'decent-env-client';
+import { EnvConstants, DecentEnvClient } from 'decent-env-client';
+import { DecentEnvProvider } from './services/service-provider';
 const app = express();
+app.use(express.json());
 
-const DecentServices: { [serviceName: string]: Service } = {};
-
-export class DecentEnvProvider {
-  async register(service: Service) {
-    const { name, data, url, port } = service;
-    const usePort = port || (await portFinder.getPortPromise());
-    DecentServices[name] = {
-      name,
-      data,
-      url,
-      port: usePort
-    };
-    return DecentServices[name];
-  }
-
-  get(serviceName) {
-    return DecentServices[serviceName];
-  }
-}
 const provider = new DecentEnvProvider();
 
 app.get('/ping', (req, res) => {
-  res.send('pong');
-});
-app.get('/service/:serviceName', (req, res) => {
-  const { serviceName } = req.params;
-  provider.get(serviceName);
-});
-app.post('/service', (req, res) => {
-  const { name, url, port, data } = req.body;
-  provider.register({ name, url, port, data });
+  res.send({ msg: 'pong' });
 });
 
-const port = process.env.DECENT_ENV_PORT || 5555;
-app.listen(port, () => {
-  console.log('service registry started on port', port);
+app.get('/service/:serviceName', (req, res) => {
+  const { serviceName } = req.params;
+  const payload = provider.get(serviceName);
+  res.send(payload);
+});
+
+app.post('/service', async (req, res) => {
+  const { name, url, port, data } = req.body;
+  const payload = await provider.register({ name, url, port, data });
+  res.send(payload);
+});
+
+const port = EnvConstants.DECENT_ENV_PORT;
+
+app.listen(port, async () => {
+  const env = new DecentEnvClient();
+  const service = await env.register({ name: 'services', port, host: EnvConstants.DECENT_ENV_HOST });
+  console.log(`App listening on port ${service.port} `);
 });

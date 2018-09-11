@@ -48,24 +48,47 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var request = require("request-promise");
 exports.EnvConstants = {
-    web3: { url: 'http://localhost:8545' }
+    web3: { url: 'http://localhost:8545' },
+    DECENT_ENV_PORT: process.env.DECENT_ENV_PORT || 5555,
+    DECENT_ENV_HOST: process.env.DECENT_ENV_HOST || 'http://localhost'
 };
+var defaultUrl = exports.EnvConstants.DECENT_ENV_HOST + ':' + exports.EnvConstants.DECENT_ENV_PORT;
 var DecentEnvClient = (function () {
-    function DecentEnvClient(decentEnvApiUrl) {
-        this.decentEnvApiUrl = decentEnvApiUrl;
+    function DecentEnvClient(url) {
+        if (url === void 0) { url = defaultUrl; }
+        this.url = url;
     }
     DecentEnvClient.prototype.register = function (service) {
         return __awaiter(this, void 0, void 0, function () {
-            var resp;
+            var waiting, ping, e_1, resp;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4, request.post(this.decentEnvApiUrl + "/service", {
+                    case 0:
+                        waiting = true;
+                        _a.label = 1;
+                    case 1:
+                        if (!waiting) return [3, 6];
+                        _a.label = 2;
+                    case 2:
+                        _a.trys.push([2, 4, , 5]);
+                        console.log('waiting for service registry to come up @ ', this.url);
+                        return [4, request.get(this.url + '/ping')];
+                    case 3:
+                        ping = _a.sent();
+                        waiting = false;
+                        return [3, 5];
+                    case 4:
+                        e_1 = _a.sent();
+                        console.log('still waiting for service registry to come up @ ', this.url);
+                        return [3, 5];
+                    case 5: return [3, 1];
+                    case 6: return [4, request.post(this.url + "/service", {
                             body: __assign({}, service),
                             json: true
                         })];
-                    case 1:
+                    case 7:
                         resp = _a.sent();
-                        return [2, JSON.parse(resp)];
+                        return [2, resp];
                 }
             });
         });
@@ -75,7 +98,7 @@ var DecentEnvClient = (function () {
             var resp;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4, request.get(this.decentEnvApiUrl + ("/service/" + serviceName))];
+                    case 0: return [4, request.get(this.url + ("/service/" + serviceName))];
                     case 1:
                         resp = _a.sent();
                         return [2, JSON.parse(resp)];
