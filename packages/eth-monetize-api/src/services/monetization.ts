@@ -1,9 +1,9 @@
 import Web3 = require('web3');
-const web3Config = require('../../constants/web3');
-const web3 = new Web3(new Web3.providers.WebsocketProvider(web3Config.url));
+import { EnvConstants } from 'decent-env-client';
+const web3 = new Web3(new Web3.providers.WebsocketProvider(EnvConstants.web3.url));
 
-import { CryptoMarketsClient } from '../../../crypto-markets-client/ts_build';
-import { ValidPaymentClient } from '../../../valid-payment-client/ts_build';
+import { CryptoMarketsClient } from 'crypto-markets-client';
+import { ValidPaymentClient } from 'valid-payment-client';
 
 export class MonetizationService {
   static async getQuoteForApiCalls(callCount: number, usdPerCall: number) {

@@ -1,24 +1,51 @@
-0 silly input [ 'npm', 'start' ]
-1 silly flags { _: [ 'exec' ],
+0 silly input [ 'compile' ]
+1 silly flags { _: [ 'run' ],
 1 silly flags   'reject-cycles': false,
 1 silly flags   rejectCycles: false,
-1 silly flags   parallel: true,
-1 silly flags   command: 'npm',
-1 silly flags   args: [ 'start' ] }
+1 silly flags   script: 'compile',
+1 silly flags   args: [] }
 2 verbose rootPath /Users/micah/dev/decent-services
 3 info version 2.9.1
 4 silly existsSync /Users/micah/dev/decent-services/VERSION
 5 silly initialize attempt
 6 silly initialize success
 7 silly execute attempt
-8 info exec in 7 package(s): npm start
-9 error execute callback with error
-10 error Error: Command failed: npm start
-10 error npm ERR! missing script: start
-10 error
-10 error npm ERR! A complete log of this run can be found in:
-10 error npm ERR!     /Users/micah/.npm/_logs/2018-09-10T23_20_30_064Z-debug.log
-10 error
-10 error
-10 error     at Promise.all.then.arr (/Users/micah/.nvm/versions/node/v8.9.4/lib/node_modules/lerna/node_modules/execa/index.js:236:11)
-10 error     at <anonymous>
+8 silly runScriptInDir compile [] crypto-markets-client
+9 silly getExecOpts { cwd: '/Users/micah/dev/decent-services/packages/crypto-markets-client' }
+10 silly runScriptInDir compile [] decent-env-client
+11 silly getExecOpts { cwd: '/Users/micah/dev/decent-services/packages/decent-env-client' }
+12 silly runScriptInDir compile [] decent-smart-contracts
+13 silly getExecOpts { cwd: '/Users/micah/dev/decent-services/packages/decent-smart-contracts' }
+14 silly runScriptInDir compile [] shift-to-me-api
+15 silly getExecOpts { cwd: '/Users/micah/dev/decent-services/packages/shift-to-me-api' }
+16 silly runScriptInDir compile [] shift-to-me-frontend
+17 silly getExecOpts { cwd: '/Users/micah/dev/decent-services/packages/shift-to-me-frontend' }
+18 silly runScriptInDir compile [] valid-payment-client
+19 silly getExecOpts { cwd: '/Users/micah/dev/decent-services/packages/valid-payment-client' }
+20 silly runScriptInDir compile [] crypto-markets-api
+21 silly getExecOpts { cwd: '/Users/micah/dev/decent-services/packages/crypto-markets-api' }
+22 silly runScriptInDir compile [] decent-env-api
+23 silly getExecOpts { cwd: '/Users/micah/dev/decent-services/packages/decent-env-api' }
+24 silly runScriptInDir compile [] eth-monetize-api
+25 silly getExecOpts { cwd: '/Users/micah/dev/decent-services/packages/eth-monetize-api' }
+26 error compile Errored while running script in 'decent-env-api'
+27 error execute callback with error
+28 error Error: Command failed: npm run compile
+28 error npm ERR! code ELIFECYCLE
+28 error npm ERR! errno 2
+28 error npm ERR! decent-env-api@1.0.0 compile: `tsc`
+28 error npm ERR! Exit status 2
+28 error npm ERR!
+28 error npm ERR! Failed at the decent-env-api@1.0.0 compile script.
+28 error npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+28 error
+28 error npm ERR! A complete log of this run can be found in:
+28 error npm ERR!     /Users/micah/.npm/_logs/2018-09-11T05_59_08_087Z-debug.log
+28 error
+28 error > decent-env-api@1.0.0 compile /Users/micah/dev/decent-services/packages/decent-env-api
+28 error > tsc
+28 error
+28 error src/index.ts(3,25): error TS2307: Cannot find module 'decent-env-client'.
+28 error
+28 error     at Promise.all.then.arr (/Users/micah/.nvm/versions/node/v8.9.4/lib/node_modules/lerna/node_modules/execa/index.js:236:11)
+28 error     at <anonymous>

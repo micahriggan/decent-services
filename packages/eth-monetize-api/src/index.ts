@@ -15,3 +15,8 @@ const port = 3000;
 api.listen(port, () => {
   console.info(`Api listening on port ${port}`);
 });
+
+export const SmartContracts = {
+  PaymentValidator: require('../blockchain/build/contracts/PaymentValidator.json'),
+  ApiMonetization: require('../blockchain/build/contracts/ApiMonetization.json')
+}

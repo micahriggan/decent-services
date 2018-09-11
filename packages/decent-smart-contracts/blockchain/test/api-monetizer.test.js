@@ -1,10 +1,13 @@
 const ApiMonetization = artifacts.require('../contracts/ApiMonetization.sol');
 const spec = require('../build/contracts/ApiMonetization.json');
 const Web3 = require('web3');
-const web3Config = require('../../constants/web3');
-const web3 = new Web3(new Web3.providers.WebsocketProvider(web3Config.url));
-const contractConfig = require('../../constants/contracts.js');
 const { MonetizationService } = require('../../ts_build/services/monetization');
+const { EnvConstants } = require('decent-env-client');
+const { ValidPaymentClient } = require('valid-payment-client');
+const validPaymentClient = new ValidPaymentClient();
+const web3 = new Web3(new Web3.providers.WebsocketProvider(EnvConstants.web3.url));
+
+
 
 contract('ApiMonetization', (accounts) => {
 
