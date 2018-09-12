@@ -19,6 +19,6 @@ export class EthMonetizeClient extends BaseClient {
     const resp = await request.get(url + `/quote-calls/${calls}/${costPerCall}`, {
       json: true
     });
-    return JSON.parse(resp) as ApiPurchaseQuote;
+    return resp as ApiPurchaseQuote;
   }
 }

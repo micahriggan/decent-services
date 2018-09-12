@@ -40,7 +40,7 @@ export class DecentEnvClient {
   }
 
   async get(serviceName: string) {
-    const resp = await request.get(this.url + `/service/${serviceName}`);
+    const resp = await request.get(this.url + `/service/${serviceName}`, { json: true });
     return resp as Service;
   }
 }

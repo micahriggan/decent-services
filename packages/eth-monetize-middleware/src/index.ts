@@ -1,5 +1,5 @@
 import Web3 = require('web3');
-import { SmartContracts } from 'decent-smart-contracts';
+import { SmartContracts } from 'smart-contracts-client';
 const contractAddress = process.env.ApiMonetization || '';
 const web3Config = require('./constants/web3');
 const web3 = new Web3(new Web3.providers.WebsocketProvider(web3Config.url));

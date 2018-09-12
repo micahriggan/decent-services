@@ -23,7 +23,7 @@ export class ValidPaymentClient extends BaseClient {
     if (data) {
       url += `/${data}`;
     }
-    const resp = await request.get(url);
-    return JSON.parse(resp) as QuoteResponse;
+    const resp = await request.get(url, { json: true });
+    return resp as QuoteResponse;
   }
 }

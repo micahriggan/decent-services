@@ -1,5 +1,8 @@
-export class SignerUtil {
-  constructor(private web3, private signingAddress) {}
+export class PaymentValidatorUtil {
+  private contract;
+  constructor(private web3, abi, address?: string) {
+    this.contract = new web3.eth.Contract(abi, address);
+  }
 
   createMessage({ amount, expiration, payloadHash }) {
     return [
@@ -35,8 +38,10 @@ export class SignerUtil {
     return this.web3.utils.soliditySha3(...messageArr);
   }
 
-  signHash(hash) {
-    return this.web3.eth.sign(hash, this.signingAddress);
+  async signHash(hash) {
+    const signingAddress = await this.contract.methods.quoteSigner().call();
+    console.log(signingAddress);
+    return this.web3.eth.sign(hash, signingAddress);
   }
 
   async makeInvoice(wei, data = '') {
@@ -59,5 +64,19 @@ export class SignerUtil {
     const s = `0x${sig.slice(64, 128)}`;
     const v = this.web3.utils.toDecimal(sig.slice(128, 130)) + 27;
     return { hash, signedHash, amount, expiration, payload, payloadHash, v, r, s };
+  }
+
+  watchForPayment(cb) {
+    var event = this.contract.events.PaymentAccepted({}, (err, resp) => {
+      if (err) return cb(err);
+      if (!err) {
+        return cb(null, resp);
+      }
+    });
+  }
+
+  isValidPayment({ hash, signedHash, amount, expiration, nonce, v, r, s }) {
+    const isValid = this.contract.methods.isValidPayment(amount, expiration, nonce, hash, v, r, s).call();
+    return isValid;
   }
 }

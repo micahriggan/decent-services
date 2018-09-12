@@ -7,7 +7,7 @@ import { ValidPaymentClient } from 'valid-payment-client';
 
 export class MonetizationService {
   static async getQuoteForApiCalls(callCount: number, usdPerCall: number) {
-    const priceClient = new CryptoMarketsClient('http://localhost:4000');
+    const priceClient = new CryptoMarketsClient();
     const paymentClient = new ValidPaymentClient();
     const totalUsd = usdPerCall * callCount;
     const [etherTicker] = await priceClient.getTickerForExchange('ETH_USD', 'bittrex');

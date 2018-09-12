@@ -1,33 +1,33 @@
 const ApiMonetization = artifacts.require('../contracts/ApiMonetization.sol');
-const spec = require('../build/contracts/ApiMonetization.json');
+const PaymentValidator = artifacts.require('../contracts/PaymentValidator.sol');
+const { PaymentValidatorUtil } = require('smart-contracts-client');
+const monetizeSpec = require('../build/contracts/ApiMonetization.json');
+const validateSpec = require('../build/contracts/PaymentValidator.json');
 const Web3 = require('web3');
-const { EthMonetizeClient } = require('eth-monetize-client');
-const { EnvConstants } = require('decent-env-client');
-const monetizeClient = new EthMonetizeClient();
-const web3 = new Web3(new Web3.providers.WebsocketProvider(EnvConstants.web3.url));
+const web3 = new Web3(new Web3.providers.WebsocketProvider("http://localhost:8545"));
 
 
 
 contract('ApiMonetization', (accounts) => {
 
+  const totalWei = 100;
   const purchaseAmount = 100;
   const payer = accounts[2];
   const signingKey = accounts[3];
 
   it(`should be able to get a signed quote for ${purchaseAmount} api calls`, async () => {
-    let { totalEther, totalUsd, signedQuote } = await monetizeClient.getQuote(
-      purchaseAmount,
-      1
-    );
-    assert(totalUsd === purchaseAmount, "We asked for 100 api calls at 1 dollar per call");
-    assert(totalEther > 0, "Uhm, $0 ether seems bad");
+    const contract = await PaymentValidator.deployed();
+    const validator = new PaymentValidatorUtil(web3, validateSpec.abi, contract.address);
+    const signedQuote = await validator.makeInvoice(totalWei, purchaseAmount);
+
+    assert(signedQuote != null, "We should be able to get a quote");
   });
 
   it('should be able to purchase the api calls', async () => {
-    let { totalEther, totalWei, totalUsd, signedQuote } = await monetizeClient.getQuote(
-      purchaseAmount,
-      1
-    );
+    const contract = await PaymentValidator.deployed();
+    const validator = new PaymentValidatorUtil(web3, validateSpec.abi, contract.address);
+    const signedQuote = await validator.makeInvoice(totalWei, purchaseAmount);
+
     const instance = await ApiMonetization.deployed();
     const { expiration, payloadHash, payload, hash, v, r, s, amount } = signedQuote;
     const { nonce } = payload;
@@ -36,7 +36,7 @@ contract('ApiMonetization', (accounts) => {
     assert(solidityHash === payloadHash, 'The hash of nonce and callCount should equal the payloadHash');
 
 
-    const monetizationContract = new web3.eth.Contract(spec.abi, instance.address);
+    const monetizationContract = new web3.eth.Contract(monetizeSpec.abi, instance.address);
 
     const apiPurchased = new Promise((resolve, reject) => {
       monetizationContract.events.ApiPurchase({}, (err, resp) => {

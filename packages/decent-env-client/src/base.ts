@@ -1,23 +1,25 @@
 import { DecentEnvClient, Service } from '.';
 export class BaseClient {
   private envClient: DecentEnvClient;
-  private servicePromise: Promise<Service>;
   private service: Service;
 
   constructor(private serviceName, envUrl?: string) {
     this.envClient = new DecentEnvClient(envUrl);
-    this.servicePromise = this.envClient.get(this.serviceName);
   }
 
   async getUrl() {
-    if (!this.service && this.servicePromise) {
-      this.service = await this.servicePromise;
+    if (!this.service) {
+      this.service = await this.envClient.get(this.serviceName);
     }
     return this.service.url;
   }
 
-  register(service?: Service) {
+  register(service?: Partial<Service>) {
     const srv = Object.assign({}, { name: this.serviceName }, service);
     return this.envClient.register(srv);
+  }
+
+  get(): Promise<Service> {
+    return this.envClient.get(this.serviceName);
   }
 }
