@@ -23,3 +23,4 @@ src/vendor
 src/dist
 lerna-debug*
 **/ts_build/*
+**/blockchain/build
