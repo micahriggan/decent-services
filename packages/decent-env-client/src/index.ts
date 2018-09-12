@@ -18,18 +18,28 @@ const defaultUrl = EnvConstants.DECENT_ENV_HOST + ':' + EnvConstants.DECENT_ENV_
 export class DecentEnvClient {
   constructor(private url: string = defaultUrl) {}
 
+  private async ensureConnected() {
+    const timerDone = (timer, cb) => {
+      clearInterval(timer);
+      cb();
+    };
+    const ping = () => {
+      return request.get(this.url + '/ping');
+    };
+    await new Promise(async resolve => {
+      const timer = setInterval(async () => {
+        try {
+          await ping();
+          timerDone(timer, resolve);
+        } catch (e) {
+          console.log('waiting for service registry to come up @ ', this.url);
+        }
+      }, 1000);
+    });
+  }
+
   async register(service: Service) {
-    let waiting = true;
-    while (waiting) {
-      try {
-        console.log('waiting for service registry to come up @ ', this.url);
-        const ping = await request.get(this.url + '/ping');
-        waiting = false;
-      } catch (e) {
-        console.log('still waiting for service registry to come up @ ', this.url);
-      }
-    }
-    console.log('hitting', this.url);
+    await this.ensureConnected();
     const resp = await request.post(this.url + `/service`, {
       body: {
         ...service
@@ -40,6 +50,7 @@ export class DecentEnvClient {
   }
 
   async get(serviceName: string) {
+    await this.ensureConnected();
     const resp = await request.get(this.url + `/service/${serviceName}`, { json: true });
     return resp as Service;
   }

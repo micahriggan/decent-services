@@ -8,10 +8,25 @@ export class BaseClient {
   }
 
   async getUrl() {
-    if (!this.service) {
-      this.service = await this.envClient.get(this.serviceName);
-    }
-    return this.service.url;
+    const fetch = async () => {
+      return this.envClient.get(this.serviceName);
+    };
+    this.service = await fetch();
+    const timerDone = (timer, cb) => {
+      if (!this.service) {
+        console.log('Waiting for ', this.serviceName);
+      } else {
+        clearInterval(timer);
+        cb(this.service.url);
+      }
+    };
+    return new Promise(resolve => {
+      const timer = setInterval(async () => {
+        await fetch();
+        timerDone(timer, resolve);
+      }, 1000);
+      timerDone(timer, resolve);
+    });
   }
 
   register(service?: Partial<Service>) {

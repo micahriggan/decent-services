@@ -5,7 +5,7 @@
   "main": "./ts_build/index.js",
   "types": "./ts_build/index.d.ts",
   "scripts": {
-    "start": "npm run compile && start.sh",
+    "start": "npm run compile && ./start.sh",
     "compile": "npm run truffle:compile && ./node_modules/.bin/tsc",
     "truffle:compile": "cd ./blockchain && truffle compile",
     "truffle:migrate": "cd ./blockchain && truffle migrate --network testrpc",
