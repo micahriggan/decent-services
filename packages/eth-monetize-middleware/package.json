@@ -1,0 +1,22 @@
+{
+  "name": "eth-monetize-middleware",
+  "version": "1.0.0",
+  "description": "express middleware for monetizing an api route",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "express",
+    "middleware"
+  ],
+  "author": "Micah Riggan",
+  "license": "MIT",
+  "dependencies": {
+    "web3": "^1.0.0-beta.36",
+    "smart-contracts-client": "1.0.0"
+  },
+  "devDependencies": {
+    "@types/web3": "^1.0.4"
+  }
+}

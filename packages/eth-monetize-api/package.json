@@ -4,7 +4,7 @@
   "description": "backend for api monetization",
   "main": "index.js",
   "scripts": {
-    "start": "npm run compile && ./start.sh",
+    "start": "npm run compile && node ./ts_build/index.js",
     "compile": "./node_modules/.bin/tsc",
     "test": "cd ./blockchain/ && truffle test --network testrpc",
     "testrpc": "./node_modules/.bin/ganache-cli"
@@ -13,6 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "crypto-markets-client": "1.0.0",
+    "eth-monetize-client": "1.0.0",
     "express": "^4.16.3",
     "valid-payment-client": "1.0.0",
     "web3": "^1.0.0-beta.36"

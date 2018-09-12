@@ -1,17 +1,18 @@
 {
-  "name": "crypto-markets-client",
+  "name": "smart-contracts-client",
   "version": "1.0.0",
-  "description": "the client for getting market data",
+  "description": "the client for getting and registering smart contracts to the smart contract api",
   "main": "./ts_build/index.js",
   "types": "./ts_build/index.d.ts",
   "scripts": {
     "compile": "./node_modules/.bin/tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Micah Riggan",
   "license": "MIT",
   "devDependencies": {
-    "ccxt": "^1.17.241",
+    "@types/node": "^10.9.4",
+    "@types/web3": "^1.0.4",
     "typescript": "^3.0.3"
   },
   "dependencies": {

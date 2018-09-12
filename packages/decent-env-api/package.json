@@ -1,0 +1,23 @@
+{
+  "name": "decent-env-api",
+  "version": "1.0.0",
+  "description": "the environment for decent-services. Includes port registration and urls",
+  "main": "./ts_build/index.js",
+  "types": "./ts_build/index.d.ts",
+  "scripts": {
+    "compile": "./node_modules/.bin/tsc",
+    "start": "npm run compile && node ./ts_build/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Micah Riggan",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.3",
+    "portfinder": "^1.0.17"
+  },
+  "devDependencies": {
+    "@types/express": "^4.16.0",
+    "decent-env-client": "1.0.0",
+    "typescript": "^3.0.3"
+  }
+}

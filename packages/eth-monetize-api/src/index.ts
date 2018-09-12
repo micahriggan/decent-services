@@ -1,6 +1,7 @@
 import express = require('express');
 import { MonetizationService } from './services/monetization';
-
+import { EthMonetizeClient} from 'eth-monetize-client';
+const client = new EthMonetizeClient();
 const api = express();
 
 api.get('/quote-calls/:calls/:costPerCall', async (req, res) => {
@@ -11,7 +12,8 @@ api.get('/quote-calls/:calls/:costPerCall', async (req, res) => {
   res.json({ totalEther, totalUsd, signedQuote });
 });
 
-const port = 3000;
-api.listen(port, () => {
-  console.info(`Api listening on port ${port}`);
+client.register().then(service => {
+  api.listen(service.port, () => {
+    console.info(`Api listening on port ${service.port}`);
+  });
 });

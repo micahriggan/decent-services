@@ -1,0 +1,32 @@
+{
+  "name": "smart-contracts-api",
+  "version": "1.0.0",
+  "description": "decent ventures smart contracts",
+  "main": "./ts_build/index.js",
+  "types": "./ts_build/index.d.ts",
+  "scripts": {
+    "start": "npm run compile && ./start.sh",
+    "compile": "npm run truffle:compile && ./node_modules/.bin/tsc",
+    "truffle:compile": "cd ./blockchain && truffle compile",
+    "truffle:migrate": "cd ./blockchain && truffle migrate --network testrpc",
+    "truffle:test": "cd ./blockchain && truffle test --network testrpc",
+    "test": "npm run truffle:test"
+  },
+  "keywords": [
+    "ethereum",
+    "smart",
+    "contracts"
+  ],
+  "author": "Micah Riggan",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^10.9.4",
+    "@types/web3": "^1.0.4",
+    "smart-contracts-client": "1.0.0",
+    "truffle": "^4.1.14",
+    "typescript": "^3.0.3"
+  },
+  "dependencies": {
+    "web3": "^1.0.0-beta.36"
+  }
+}
