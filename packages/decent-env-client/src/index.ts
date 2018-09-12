@@ -19,23 +19,20 @@ export class DecentEnvClient {
   constructor(private url: string = defaultUrl) {}
 
   private async ensureConnected() {
-    const timerDone = (timer, cb) => {
-      clearInterval(timer);
-      cb();
-    };
+    let connected = false;
     const ping = () => {
       return request.get(this.url + '/ping');
     };
-    await new Promise(async resolve => {
-      const timer = setInterval(async () => {
-        try {
-          await ping();
-          timerDone(timer, resolve);
-        } catch (e) {
-          console.log('waiting for service registry to come up @ ', this.url);
-        }
-      }, 1000);
-    });
+
+    while (!connected) {
+      try {
+        await ping();
+        connected = true;
+      } catch (e) {
+        console.log('waiting for service registry to come up @ ', this.url);
+        await new Promise(r => setTimeout(r, 1000));
+      }
+    }
   }
 
   async register(service: Service) {
