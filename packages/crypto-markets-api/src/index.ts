@@ -3,7 +3,9 @@ import * as ccxt from 'ccxt';
 import { ExchangeService } from './services/ExchangeMarkets';
 import { MetricService } from './services/Metrics';
 import { DecentEnvClient, EnvConstants } from 'decent-env-client';
+import { CryptoMarketsClient } from "crypto-markets-client";
 const app = express();
+const client = new CryptoMarketsClient();
 
 app.use('/exchanges', (req, res) => {
   res.json(ccxt.exchanges);
@@ -49,8 +51,7 @@ app.use('/arbitrage', async (req, res) => {
   res.json(opportunities);
 });
 
-const env = new DecentEnvClient();
-env.register({ name: 'crypto-markets-api' }).then(service => {
+client.register().then(service => {
   app.listen(service.port, async () => {
     console.log(`App listening on port ${service.port} `);
     ExchangeService.montior();

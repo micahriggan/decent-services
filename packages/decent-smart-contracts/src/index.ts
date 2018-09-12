@@ -15,7 +15,9 @@ function getFor(web3: Web3): Promise<Spec> {
     web3.eth.net.getId((err, resp) => {
       if (err) reject(err);
       if (!this.spec.networks[resp]) reject();
-      resolve({ address: this.spec.networks[resp].address, abi: this.spec.abi });
+      const address = this.spec.networks[resp].address;
+      if (!address) reject("This contract hasn't been deployed");
+      resolve({ address, abi: this.spec.abi });
     });
   });
 }

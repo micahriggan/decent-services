@@ -1,4 +1,4 @@
-import { DecentEnvClient, Service } from ".";
+import { DecentEnvClient, Service } from '.';
 export class BaseClient {
   private envClient: DecentEnvClient;
   private servicePromise: Promise<Service>;
@@ -14,5 +14,10 @@ export class BaseClient {
       this.service = await this.servicePromise;
     }
     return this.service.url;
+  }
+
+  register(service?: Service) {
+    const srv = Object.assign({}, { name: this.serviceName }, service);
+    return this.envClient.register(srv);
   }
 }

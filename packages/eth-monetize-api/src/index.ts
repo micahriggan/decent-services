@@ -1,7 +1,7 @@
 import express = require('express');
 import { MonetizationService } from './services/monetization';
-import { DecentEnvClient } from 'decent-env-client';
-const env = new DecentEnvClient();
+import { EthMonetizeClient} from 'eth-monetize-client';
+const client = new EthMonetizeClient();
 const api = express();
 
 api.get('/quote-calls/:calls/:costPerCall', async (req, res) => {
@@ -12,7 +12,7 @@ api.get('/quote-calls/:calls/:costPerCall', async (req, res) => {
   res.json({ totalEther, totalUsd, signedQuote });
 });
 
-env.register({ name: 'eth-monetize-api' }).then(service => {
+client.register().then(service => {
   api.listen(service.port, () => {
     console.info(`Api listening on port ${service.port}`);
   });

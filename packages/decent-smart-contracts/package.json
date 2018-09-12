@@ -7,6 +7,7 @@
   "scripts": {
     "compile": "npm run truffle:compile && ./node_modules/.bin/tsc",
     "truffle:compile": "cd ./blockchain && truffle compile",
+    "truffle:migrate": "cd ./blockchain && truffle migrate --network testrpc",
     "truffle:test": "cd ./blockchain && truffle test",
     "test": "npm run truffle:test"
   },

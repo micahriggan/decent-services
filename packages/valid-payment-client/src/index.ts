@@ -13,8 +13,9 @@ type QuoteResponse = {
 };
 
 export class ValidPaymentClient extends BaseClient {
+  static serviceName = 'valid-payment-api';
   constructor(url?: string) {
-    super('valid-payment-api', url);
+    super(ValidPaymentClient.serviceName, url);
   }
   async getQuote(wei, data?) {
     const base = await this.getUrl();

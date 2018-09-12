@@ -29,6 +29,7 @@ export class DecentEnvClient {
         console.log('still waiting for service registry to come up @ ', this.url);
       }
     }
+    console.log('hitting', this.url);
     const resp = await request.post(this.url + `/service`, {
       body: {
         ...service
@@ -40,7 +41,7 @@ export class DecentEnvClient {
 
   async get(serviceName: string) {
     const resp = await request.get(this.url + `/service/${serviceName}`);
-    return JSON.parse(resp) as Service;
+    return resp as Service;
   }
 }
 export * from './base';

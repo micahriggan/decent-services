@@ -1,14 +1,16 @@
 import express = require('express');
-import { DecentEnvClient, EnvConstants } from 'decent-env-client';
+import { EnvConstants } from 'decent-env-client';
 import { SignerUtil } from './lib/signer';
 import { Monitor } from './lib/monitor';
 import { SmartContracts } from 'decent-smart-contracts';
+import { ValidPaymentClient } from 'valid-payment-client';
 
 import Web3 = require('web3');
 const web3 = new Web3(new Web3.providers.WebsocketProvider(EnvConstants.web3.url));
 
 const api = express();
-const env = new DecentEnvClient();
+const client = new ValidPaymentClient();
+
 web3.eth.getAccounts(async (err, accounts) => {
   const signer = new SignerUtil(web3, accounts[1]);
   const data = await SmartContracts.PaymentValidator.getFor(web3);
@@ -27,7 +29,7 @@ web3.eth.getAccounts(async (err, accounts) => {
     res.send(payload);
   });
 
-  env.register({ name: 'valid-payments-api' }).then(service => {
+  client.register().then(service => {
     api.listen(service.port, () => {
       console.info(`Api listening on port ${service.port}`);
       monitor.watchForPayment(console.log);

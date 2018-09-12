@@ -22,3 +22,4 @@ dist
 src/vendor
 src/dist
 lerna-debug*
+**/ts_build/*
