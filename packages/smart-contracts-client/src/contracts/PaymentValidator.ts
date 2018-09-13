@@ -40,7 +40,6 @@ export class PaymentValidatorUtil {
 
   async signHash(hash) {
     const signingAddress = await this.contract.methods.quoteSigner().call();
-    console.log(signingAddress);
     return this.web3.eth.sign(hash, signingAddress);
   }
 

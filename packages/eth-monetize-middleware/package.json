@@ -4,7 +4,8 @@
   "description": "express middleware for monetizing an api route",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "compile": "./node_modules/.bin/tsc",
+    "test": "./node_modules/.bin/jest"
   },
   "keywords": [
     "express",
@@ -17,6 +18,10 @@
     "smart-contracts-client": "1.0.0"
   },
   "devDependencies": {
-    "@types/web3": "^1.0.4"
+    "@types/jest": "^23.3.2",
+    "@types/web3": "^1.0.4",
+    "jest": "^23.6.0",
+    "ts-jest": "^23.1.4",
+    "typescript": "^3.0.3"
   }
 }
