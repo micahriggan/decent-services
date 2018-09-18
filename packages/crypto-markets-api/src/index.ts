@@ -2,7 +2,6 @@ import * as express from 'express';
 import * as ccxt from 'ccxt';
 import { ExchangeService } from './services/ExchangeMarkets';
 import { MetricService } from './services/Metrics';
-import { DecentEnvClient, EnvConstants } from 'decent-env-client';
 import { CryptoMarketsClient } from "crypto-markets-client";
 const app = express();
 const client = new CryptoMarketsClient();

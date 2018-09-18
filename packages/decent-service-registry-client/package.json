@@ -1,5 +1,5 @@
 {
-  "name": "decent-env-client",
+  "name": "decent-service-registry-client",
   "version": "1.0.0",
   "description": "the client to use the service registry",
   "main": "./ts_build/index.js",

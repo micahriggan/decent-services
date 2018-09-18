@@ -1,5 +1,5 @@
 {
-  "name": "decent-env-api",
+  "name": "decent-service-registry-api",
   "version": "1.0.0",
   "description": "the environment for decent-services. Includes port registration and urls",
   "main": "./ts_build/index.js",
@@ -17,7 +17,7 @@
   },
   "devDependencies": {
     "@types/express": "^4.16.0",
-    "decent-env-client": "1.0.0",
+    "decent-service-registry-client": "1.0.0",
     "typescript": "^3.0.3"
   }
 }

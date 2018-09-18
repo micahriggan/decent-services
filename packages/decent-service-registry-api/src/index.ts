@@ -1,6 +1,5 @@
 import express = require('express');
-import { Service } from 'decent-env-client';
-import { EnvConstants, DecentEnvClient } from 'decent-env-client';
+import { Service, EnvConstants, DecentEnvClient } from 'decent-service-registry-client';
 import { DecentEnvProvider } from './services/service-provider';
 const app = express();
 app.use(express.json());

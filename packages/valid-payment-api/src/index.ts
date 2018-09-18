@@ -1,5 +1,5 @@
 import express = require('express');
-import { EnvConstants } from 'decent-env-client';
+import { EnvConstants } from 'decent-service-registry-client';
 import { SmartContractsClient, PaymentValidatorUtil } from 'smart-contracts-client';
 import { ValidPaymentClient } from 'valid-payment-client';
 

@@ -1,5 +1,5 @@
 import portFinder = require('portfinder');
-import { Service } from 'decent-env-client';
+import { Service } from 'decent-service-registry-client';
 const DecentServices: { [serviceName: string]: Service } = {};
 
 export class DecentEnvProvider {
