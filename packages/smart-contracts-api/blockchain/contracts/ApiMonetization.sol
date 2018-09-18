@@ -33,7 +33,7 @@ contract ApiMonetization {
   {
     bytes32 ourHash = keccak256(abi.encodePacked(nonce, numCalls));
     require(ourHash == payload, "Mismatch between hash of number of calls and user input");
-    validator.pay.value(msg.value)(expiration, payload, hash, v, r, s);
+    require(validator.validatePayment(msg.value, expiration, payload, hash, v, r, s), "Payment must be valid");
     emit ApiPurchase(signingKey, msg.sender, msg.value);
     purchases[signingKey] = numCalls;
   }

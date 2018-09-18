@@ -13,8 +13,35 @@ contract PaymentValidator {
     quoteSigner = valueSigner;
   }
 
-  function isValidPayment(uint value, uint expiration, bytes32 payload, bytes32 hash, uint8 v, bytes32 r, bytes32 s) public view returns(bool valid) {
-    require(now <= expiration, "Payment is late");
+  function isValidPayment(
+    uint value,
+    uint expiration,
+    bytes32 payload,
+    bytes32 hash,
+    uint8 v,
+    bytes32 r,
+    bytes32 s
+  ) public view returns(bool valid) {
+    bool isValid = true;
+    isValid = isValid && block.timestamp <= expiration;
+    bytes memory prefix = "\x19Ethereum Signed Message:\n32";
+    bytes32 ourHash = keccak256(abi.encodePacked(value, expiration, payload));
+    bytes32 payloadHash = keccak256(abi.encodePacked(prefix, ourHash));
+    isValid = isValid && ourHash == hash;
+    isValid = isValid && (ecrecover(payloadHash, v, r, s) == quoteSigner);
+    return isValid;
+  }
+
+  function validatePayment(
+    uint value,
+    uint expiration,
+    bytes32 payload,
+    bytes32 hash,
+    uint8 v,
+    bytes32 r,
+    bytes32 s
+  ) public view returns(bool valid) {
+    require(block.timestamp <= expiration, "Payment is late");
     bytes memory prefix = "\x19Ethereum Signed Message:\n32";
     bytes32 ourHash = keccak256(abi.encodePacked(value, expiration, payload));
     bytes32 payloadHash = keccak256(abi.encodePacked(prefix, ourHash));
@@ -23,9 +50,17 @@ contract PaymentValidator {
     return true;
   }
 
-  function pay(uint expiration, bytes32 payload, bytes32 hash, uint8 v, bytes32 r, bytes32 s) public payable {
-    require(isValidPayment(msg.value, expiration, payload, hash, v, r, s), 'Only accept valid payments');
-    emit PaymentAccepted(hash, now, msg.value);
+
+  function pay(
+    uint expiration,
+    bytes32 payload,
+    bytes32 hash,
+    uint8 v,
+    bytes32 r,
+    bytes32 s
+  ) public payable {
+    require(validatePayment(msg.value, expiration, payload, hash, v, r, s), "Only accept valid payments");
+    emit PaymentAccepted(hash, block.timestamp, msg.value);
   }
 
   modifier isAdmin() {
