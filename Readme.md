@@ -8,7 +8,7 @@ lerna run start --parallel
 
 
 # Service Registry
-Services wait for the decent-env-api to start. Once started they register themselves and get a port number and start listening for requests
+Services wait for the service-registry-api to start. Once started they register themselves and get a port number and start listening for requests
 
 
 # Clients
