@@ -1,6 +1,6 @@
 import { Ticker } from 'ccxt';
 import request = require('request-promise');
-import { BaseClient } from 'decent-service-registry-client';
+import { BaseClient } from 'service-registry-client';
 
 export type ExchangeTicker = {
   exchange: string;

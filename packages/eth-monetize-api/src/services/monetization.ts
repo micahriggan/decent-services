@@ -1,5 +1,5 @@
 import Web3 = require('web3');
-import { EnvConstants } from 'decent-service-registry-client';
+import { EnvConstants } from 'service-registry-client';
 const web3 = new Web3(new Web3.providers.WebsocketProvider(EnvConstants.web3.url));
 
 import { CryptoMarketsClient } from 'crypto-markets-client';

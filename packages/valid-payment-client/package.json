@@ -13,7 +13,7 @@
   "dependencies": {
     "request": "^2.88.0",
     "request-promise": "^4.2.2",
-    "decent-service-registry-client": "1.0.0"
+    "service-registry-client": "1.0.0"
   },
   "devDependencies": {
     "@types/request": "^2.47.1",

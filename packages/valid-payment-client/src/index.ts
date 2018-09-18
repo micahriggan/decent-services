@@ -1,4 +1,4 @@
-import { BaseClient } from 'decent-service-registry-client';
+import { BaseClient } from 'service-registry-client';
 import * as request from 'request-promise';
 type QuoteResponse = {
   hash: string;

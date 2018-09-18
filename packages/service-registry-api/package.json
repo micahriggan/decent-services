@@ -17,7 +17,7 @@
   },
   "devDependencies": {
     "@types/express": "^4.16.0",
-    "decent-service-registry-client": "1.0.0",
+    "service-registry-client": "1.0.0",
     "typescript": "^3.0.3"
   }
 }
