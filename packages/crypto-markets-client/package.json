@@ -17,6 +17,7 @@
   "dependencies": {
     "request": "^2.88.0",
     "request-promise": "^4.2.2",
+    "eth-monetize-middleware": "1.0.0",
     "service-registry-client": "1.0.0"
   }
 }

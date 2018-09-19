@@ -1,6 +1,7 @@
 import { Ticker } from 'ccxt';
 import request = require('request-promise');
 import { BaseClient } from 'service-registry-client';
+import { buildSignature } from 'eth-monetize-middleware';
 
 export type ExchangeTicker = {
   exchange: string;
@@ -39,6 +40,16 @@ export class CryptoMarketsClient extends BaseClient {
   async getTickerForExchange(pair, exchange) {
     const url = await this.getUrl();
     const resp = await request.get(`${url}/prices/${pair}/${exchange}`);
+    return JSON.parse(resp) as ExchangeTicker[];
+  }
+
+  async getArbitrageOpportunities() {
+    const url = await this.getUrl();
+    const privKey = 'ba0a15f4ce413164db6d8560653a6239e97446dd6992d6ef74314994ea44f4cf';
+    const finalUrl = `${url}/arbitrage`;
+    const sig = buildSignature(privKey, 'GET', finalUrl, {});
+    const urlObj = { url: finalUrl, headers: { 'x-signature': sig } };
+    const resp = await request.get(urlObj);
     return JSON.parse(resp) as ExchangeTicker[];
   }
 }

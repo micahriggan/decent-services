@@ -18,7 +18,8 @@
   "dependencies": {
     "ccxt": "^1.17.235",
     "express": "^4.16.3",
-    "crypto-markets-client": "1.0.0"
+    "crypto-markets-client": "1.0.0",
+    "eth-monetize-middleware": "1.0.0"
   },
   "devDependencies": {
     "@types/es6-promise": "^3.3.0",

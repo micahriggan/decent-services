@@ -1,10 +1,10 @@
-pragma solidity ^0.4.17;
+pragma solidity ^0.4.23;
 
 contract TinyProxy {
   address public receiver;
   uint public gasBudget;
 
-  function TinyProxy(address toAddr, uint proxyGas) public {
+  constructor(address toAddr, uint proxyGas) public {
     receiver = toAddr;
     gasBudget = proxyGas;
   }
@@ -21,7 +21,7 @@ contract TinyProxy {
     if(gasBudget > 0){
       require(receiver.call.gas(gasBudget).value(balance)(), "Transfer must succeed with specified gas");
     } else {
-      require(receiver.transfer(balance), "Transfer must succeed");
+      receiver.transfer(balance);
     }
     emit FundsReleased(receiver, balance);
   }

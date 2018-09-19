@@ -19,7 +19,7 @@ export function MonetizeMiddleware(contractAddr?: string) {
   }
 
   async function monetize(req, res, next) {
-    const message = [req.method, req.originalUrl, JSON.stringify(req.body)].join('|');
+    const message = [req.method, req.originalUrl, JSON.stringify(req.body || {})].join('|');
     const signature = req.headers['x-signature'];
     const pubKey = recoverPubKey(message, signature);
     const contract = await getContract();
@@ -43,7 +43,7 @@ export function recoverPubKey(message, signature) {
   return pubKey;
 }
 
-export function buildSignature(privKey, method, url, body) {
+export function buildSignature(privKey, method, url, body = {}) {
   const message = [method, url, JSON.stringify(body)].join('|');
   const sig: any = web3.eth.accounts.sign(message, privKey);
   return sig;

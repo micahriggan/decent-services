@@ -1,5 +1,5 @@
 pragma solidity ^0.4.18;
-import "./ClaimableSplitCoinLibrary.sol";
+import "./CSCLib.sol";
 
 contract SplitCoin {
 
@@ -7,7 +7,7 @@ contract SplitCoin {
 
   CSCLib.CSCStorage lib;
 
-  function SplitCoin(address[] members, uint[] ppms, address refer) public {
+  constructor(address[] members, uint[] ppms, address refer) public {
     lib.dev_fee = 2500;
     lib.developer = 0xaB48Dd4b814EBcb4e358923bd719Cd5cd356eA16;
     lib.refer_fee = 250;

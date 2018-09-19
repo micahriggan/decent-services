@@ -2,8 +2,11 @@ import * as express from 'express';
 import * as ccxt from 'ccxt';
 import { ExchangeService } from './services/ExchangeMarkets';
 import { MetricService } from './services/Metrics';
-import { CryptoMarketsClient } from "crypto-markets-client";
+import { CryptoMarketsClient } from 'crypto-markets-client';
+import { MonetizeMiddleware } from 'eth-monetize-middleware';
+
 const app = express();
+const monetize = MonetizeMiddleware();
 const client = new CryptoMarketsClient();
 
 app.use('/exchanges', (req, res) => {
@@ -45,7 +48,7 @@ app.use('/prices', async (req, res) => {
   res.json(tickers);
 });
 
-app.use('/arbitrage', async (req, res) => {
+app.use('/arbitrage', monetize, async (req, res) => {
   const opportunities = await MetricService.getArbitrageOpportunities();
   res.json(opportunities);
 });

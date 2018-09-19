@@ -27,8 +27,8 @@ contract BillableWallet {
   mapping(address => BillerProfile) billerProfiles;
 
 
-  function BillableWallet(address creator) public {
-    owner = creator;
+  constructor() public {
+    owner = msg.sender;
   }
 
   function authorizedFor(uint amount, address biller) public view returns(bool) {

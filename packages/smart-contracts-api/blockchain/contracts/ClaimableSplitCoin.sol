@@ -1,5 +1,5 @@
-pragma solidity ^0.4.18;
-import "./ClaimableSplitCoinLibrary.sol";
+pragma solidity ^0.4.23;
+import "./CSCLib.sol";
 
 contract ClaimableSplitCoin {
 
@@ -7,7 +7,7 @@ contract ClaimableSplitCoin {
 
   CSCLib.CSCStorage csclib;
 
-  function ClaimableSplitCoin(address[] members, uint[] ppms, address refer, bool claimable, address owner) public {
+  constructor(address[] members, uint[] ppms, address refer, bool claimable, address owner) public {
     csclib.isClaimable = claimable;
     csclib.dev_fee = 2500;
     csclib.developer = 0xaB48Dd4b814EBcb4e358923bd719Cd5cd356eA16;
