@@ -1,7 +1,17 @@
-const web3 = global.web3;
 const TinyProxyFactory = artifacts.require("../contracts/TinyProxyFactory.sol");
+const Web3 = require('web3');
 
 contract("TinyProxyFactory", accounts => {
+
+  before(() => {
+    web3.setProvider(new Web3.providers.HttpProvider("http://localhost:8545"));
+  });
+
+  after(() => {
+    web3.setProvider(new Web3.providers.HttpProvider("http://localhost:8545"));
+  });
+
+
   describe("Making tiny proxies", () => {
     it("should make tiny proxies", async () => {
       let factory = await TinyProxyFactory.deployed();

@@ -1,13 +1,24 @@
-const web3 = global.web3;
 const TinyProxy = artifacts.require("../contracts/TinyProxy.sol");
+const Web3 = require('web3');
 
 contract("TinyProxy", accounts => {
+
+  before(() => {
+    web3.setProvider(new Web3.providers.HttpProvider("http://localhost:8545"));
+  });
+
+  after(() => {
+    web3.setProvider(new Web3.providers.HttpProvider("http://localhost:8545"));
+  });
+
+
   describe("Contract creation", () => {
     it("should be creatable without gasLimit", async () => {
       let proxy = await TinyProxy.new(accounts[1], 0);
+      let receiver = await proxy.receiver.call();
       assert.equal(proxy != null, true, "The proxy should be defined");
       assert.equal(
-        await proxy.receiver.call(),
+        receiver,
         accounts[1],
         "The proxy should have account 1 as the receiver"
       );
@@ -28,7 +39,7 @@ contract("TinyProxy", accounts => {
     it("should cheaply accept funds", async () => {
       proxy = await TinyProxy.new(accounts[1], 0);
       let sent = await proxy.send(
-        web3.toWei(1, "ether", { from: accounts[0] })
+        web3.utils.toWei('1', "ether", { from: accounts[0] })
       );
       assert.equal(
         sent.tx != null,
@@ -45,7 +56,7 @@ contract("TinyProxy", accounts => {
     it("should cheaply accept funds with gasLimit", async () => {
       proxyWithGas = await TinyProxy.new(accounts[1], 50000);
       let sent = await proxyWithGas.send(
-        web3.toWei(1, "ether", { from: accounts[0] })
+        web3.utils.toWei('1', "ether", { from: accounts[0] })
       );
       assert.equal(
         sent.tx != null,
@@ -62,7 +73,7 @@ contract("TinyProxy", accounts => {
 
 
     it("should release the funds to account 1", async () => {
-      const balanceBefore = web3.eth.getBalance(accounts[1]).toNumber();
+      const balanceBefore = await web3.eth.getBalance(accounts[1]);
       let release = await proxy.release();
       assert.equal(
         release.tx != null,
@@ -70,15 +81,15 @@ contract("TinyProxy", accounts => {
         "The contract should allow the release method to be called by anyone"
       );
 
-      const balanceAfter = web3.eth.getBalance(accounts[1]).toNumber();
+      const balanceAfter = await web3.eth.getBalance(accounts[1]);
       const gain = balanceAfter - balanceBefore;
-      const oneEth = web3.toWei(1, "ether");
-      assert(gain, oneEth, "Should have received the one ether");
+      const oneEth = web3.utils.toWei('1', "ether");
+      assert.equal(gain, oneEth, "Should have received the one ether");
     });
 
 
     it("should release the funds to account 1 with gas limit", async () => {
-      const balanceBefore = web3.eth.getBalance(accounts[1]).toNumber();
+      const balanceBefore = await web3.eth.getBalance(accounts[1]);
       let release = await proxyWithGas.release();
       assert.equal(
         release.tx != null,
@@ -86,9 +97,9 @@ contract("TinyProxy", accounts => {
         "The contract should allow the release method to be called by anyone"
       );
 
-      const balanceAfter = web3.eth.getBalance(accounts[1]).toNumber();
+      const balanceAfter = await web3.eth.getBalance(accounts[1]);
       const gain = balanceAfter - balanceBefore;
-      const oneEth = web3.toWei(1, "ether");
+      const oneEth = web3.utils.toWei('1', "ether");
       assert(gain, oneEth, "Should have received the one ether");
     });
   });

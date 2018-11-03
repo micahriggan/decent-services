@@ -9,11 +9,13 @@ const smartContractsClient = new SmartContractsClient();
 
 web3.eth.getAccounts(async (err, accounts) => {
   const contract = await smartContractsClient.getContract('PaymentValidator');
-  const validatorUtil = new PaymentValidatorUtil(web3, contract.spec.abi, contract.address);
+  console.log(contract);
+  const validatorUtil = new PaymentValidatorUtil(contract.spec.abi, contract.address);
   const api = express();
   const client = new ValidPaymentClient();
 
   const data = await smartContractsClient.getContract('PaymentValidator');
+  console.log(data);
   const PaymentValidator = new web3.eth.Contract(data.spec.abi, data.address);
 
   api.get('/quote/:wei/:data', async (req, res) => {

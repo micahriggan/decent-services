@@ -8,8 +8,9 @@
     "start": "npm run compile && ./start.sh",
     "compile": "npm run truffle:compile && ./node_modules/.bin/tsc",
     "truffle:compile": "cd ./blockchain && truffle compile",
+    "truffle:server": "ganache-cli -l 8000000",
     "truffle:migrate": "cd ./blockchain && truffle migrate --network testrpc",
-    "truffle:test": "cd ./blockchain && truffle test --network testrpc",
+    "truffle:test": "cd ./blockchain/ && truffle test --network testrpc",
     "test": "npm run truffle:test"
   },
   "keywords": [

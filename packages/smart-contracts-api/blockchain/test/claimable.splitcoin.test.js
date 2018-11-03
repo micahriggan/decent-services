@@ -1,6 +1,7 @@
 var SplitCoinFactory = artifacts.require('./SplitCoinFactory.sol');
 var SplitCoin = artifacts.require('./ClaimableSplitCoin.sol');
 var splitcoinJson = require('../build/contracts/ClaimableSplitCoin.json');
+var Web3 = require('web3');
 
 /*var TestRPC = require("ethereumjs-testrpc");*/
 /*web3.setProvider(TestRPC.provider());*/
@@ -9,6 +10,16 @@ contract('ClaimableSplitCoin', accounts => {
   let splitCoinContractAddr = null;
   let splitCoinSplits = [];
   let factory = null;
+
+  before(() => {
+    web3.setProvider(new Web3.providers.HttpProvider("http://localhost:8545"));
+  });
+
+  after(() => {
+    web3.setProvider(new Web3.providers.HttpProvider("http://localhost:8545"));
+  });
+
+
 
   it('should be able to deploy a ClaimableSplitCoin via factory', () => {
     return SplitCoinFactory.deployed()
@@ -29,7 +40,7 @@ contract('ClaimableSplitCoin', accounts => {
       })
       .then(splitCoinAddr => {
         splitCoinContractAddr = splitCoinAddr;
-        return web3.eth.contract(splitcoinJson.abi).at(splitCoinAddr);
+        return new web3.eth.contract(splitcoinJson.abi, splitCoinAddr);
       })
       .then(async splitCoin => {
         assert.equal(
@@ -80,7 +91,7 @@ contract('ClaimableSplitCoin', accounts => {
     let amount = web3.eth.estimateGas({
       from: web3.eth.accounts[0],
       to: splitCoinContractAddr,
-      amount: web3.toWei(1, 'ether')
+      amount: web3.utils.toWei('1', 'ether')
     });
     console.log('ClaimableSplitCoin gas estimate : ', amount);
     assert.equal(amount < 50000, true);
@@ -126,12 +137,12 @@ contract('ClaimableSplitCoin', accounts => {
 
   it('should have a claimable balance for dev, acc1, acc2 equal to 1 ether', done => {
     let splitContract = SplitCoin.at(splitCoinContractAddr);
-    let sendAmount = web3.toWei(1, 'ether');
+    let sendAmount = web3.utils.toWei('1', 'ether');
     return web3.eth.sendTransaction(
       {
         from: accounts[3],
         to: splitCoinContractAddr,
-        value: web3.toWei(1, 'ether')
+        value: web3.utils.toWei('1', 'ether')
       },
       async (err, result) => {
         let claimable1 = await splitContract.getClaimableBalance({
@@ -223,7 +234,7 @@ contract('ClaimableSplitCoin', accounts => {
           {
             from: accounts[3],
             to: addr,
-            value: web3.toWei(1, 'ether')
+            value: web3.utils.toWei('1', 'ether')
           },
           async (err, result) => {
             let ninContractSplit = SplitCoin.at(addr);

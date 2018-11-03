@@ -1,6 +1,7 @@
 var SplitCoinFactory = artifacts.require('./SplitCoinFactory.sol');
 var SplitCoin = artifacts.require('./ClaimableSplitCoin.sol');
 var splitcoinJson = require('../build/contracts/ClaimableSplitCoin.json');
+const Web3 = require('web3');
 
 /*var TestRPC = require("ethereumjs-testrpc");*/
 /*web3.setProvider(TestRPC.provider());*/
@@ -8,17 +9,16 @@ var splitcoinJson = require('../build/contracts/ClaimableSplitCoin.json');
 contract('SplitCoinFactory', (accounts) => {
   let splitCoinSplits = [];
 
-  it("should deploy a contract with two splits", () => {
+  it("should deploy a contract with two splits for correct gas cost", () => {
     let factory = null;
     return SplitCoinFactory.deployed()
       .then(async (splitFactory) => {
         factory = splitFactory;
-        let accounts = web3.eth.accounts;
         const MILLION = 1000000;
         let half = MILLION / 2;
         let gas = await factory.make.estimateGas([accounts[0], accounts[1]], [half, half], "0x0", false);
         console.log('Deploying takes', gas, 'gas');
-        assert.equal(gas <= 1370000, true, "Deploying should take < 1.37 Mil Gas");
+        assert.equal(gas <= 1870000, true, "Deploying should take < 1.37 Mil Gas");
       })
   });
 
@@ -28,7 +28,6 @@ contract('SplitCoinFactory', (accounts) => {
     return SplitCoinFactory.deployed()
       .then((splitFactory) => {
         factory = splitFactory;
-        let accounts = web3.eth.accounts;
         const MILLION = 1000000;
         let half = MILLION / 2;
         return factory.make([accounts[0], accounts[1]], [half, half], "0x0", false);
@@ -37,11 +36,11 @@ contract('SplitCoinFactory', (accounts) => {
         return tx.logs[0].args._deployed;
       })
       .then((splitCoinAddr) => {
-        return web3.eth.contract(splitcoinJson.abi).at(splitCoinAddr);
+        return new web3.eth.Contract(splitcoinJson.abi, splitCoinAddr);
       })
       .then(async (splitCoin) => {
         assert.equal(splitCoin != null, true, "The splitCoin should be defined");
-        return Promise.all([await splitCoin.splits(1), await splitCoin.splits(2)])
+        return Promise.all([await splitCoin.methods.splits(1).call(), await splitCoin.methods.splits(2).call()])
       })
       .then((splits) => {
         for (let index = 0; index < splits.length; index++) {
@@ -51,7 +50,7 @@ contract('SplitCoinFactory', (accounts) => {
           };
           let split = splits[index];
           splitData.to = split[0];
-          splitData.ppm = split[1].toFixed();
+          splitData.ppm = split[1];
           splitCoinSplits.push(splitData);
           assert.equal(split != null, true, "There should be a split at index 1");
           assert.equal(splitData.to, accounts[index], "The contract should have the user at index 1");
@@ -73,11 +72,11 @@ contract('SplitCoinFactory', (accounts) => {
         return tx.logs[0].args._deployed;
       })
       .then(async(splitCoinAddr) => {
-        return web3.eth.contract(splitcoinJson.abi).at(splitCoinAddr);
+        return new web3.eth.Contract(splitcoinJson.abi, splitCoinAddr);
       })
       .then(async (splitCoin) => {
         assert.equal(splitCoin != null, true, "The splitCoin should be defined");
-        return splitCoin.splits(1);
+        return splitCoin.methods.splits(1).call();
       })
       .then((split) => {
         let splitData = {
@@ -85,7 +84,7 @@ contract('SplitCoinFactory', (accounts) => {
           ppm: 0
         };
         splitData.to = split[0];
-        splitData.ppm = split[1].toFixed();
+        splitData.ppm = split[1];
         assert.equal(split != null, true, "There should be a split at index 1");
         assert.equal(splitData.to, accounts[0], "The contract should have the user at index 1");
         assert.equal(splitData.ppm < 1000000, true, "The user should get less than the whole amount (dev_fee)");
