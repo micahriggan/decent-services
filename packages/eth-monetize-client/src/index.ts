@@ -32,8 +32,9 @@ export class EthMonetizeClient extends BaseClient {
     return request.post({
       url: url + `/apps/${app}/`,
       body: {
-        costPerCall: costPerCall
-      }
+        costPerCall
+      },
+      json: true
     });
   }
 

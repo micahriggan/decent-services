@@ -1,6 +1,7 @@
 import { MonetizedApp } from 'eth-monetize-client';
 import { EthMonetizeClient } from 'eth-monetize-client';
 import * as React from 'react';
+import { RouteComponentProps } from 'react-router';
 import { Header, Placeholder, Segment } from 'semantic-ui-react';
 
 interface State {
@@ -8,7 +9,7 @@ interface State {
   apps: MonetizedApp[];
 }
 
-export class ListContainer extends React.Component<any, State> {
+export class ListContainer extends React.Component<RouteComponentProps, State> {
   public state: State = {
     apps: [],
     loading: true
@@ -40,11 +41,15 @@ export class ListContainer extends React.Component<any, State> {
     );
   }
 
+  private handleNavigate(appName: string) {
+    return () => this.props.history.push(`/buy/${appName}`);
+  }
+
   private getList() {
     if (this.state.apps.length > 0) {
       return this.state.apps.map(app => {
         return (
-          <Segment key={app.appName} raised={true}>
+          <Segment key={app.appName} raised={true} onClick={this.handleNavigate(app.appName)}>
             <Header image={true}>{app.appName}</Header>
             <div> {app.costPerCall} </div>
           </Segment>

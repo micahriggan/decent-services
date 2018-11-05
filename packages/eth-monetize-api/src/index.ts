@@ -20,7 +20,7 @@ const apps = {} as {[app: string]: MonetizedApp};
 api.post('/apps/:app', async (req, res) => {
   const appName = req.params.app;
   if (!apps[appName]) {
-    const costPerCall = req.body;
+    const { costPerCall } = req.body;
     apps[appName] = { costPerCall, appName };
   } else {
     res.status(400).send('App already registered');
