@@ -6,8 +6,9 @@
   "types": "./ts_build/index.d.ts",
   "scripts": {
     "start": "npm run compile && ./start.sh",
-    "compile": "npm run truffle:compile && ./node_modules/.bin/tsc",
-    "truffle:compile": "cd ./blockchain && truffle compile",
+    "compile:truffle": "cd ./blockchain && truffle compile",
+    "compile:typechain": "./node_modules/.bin/typechain --outDir ./types --target=web3-1.0.0 './blockchain/build/contracts/*.json'",
+    "compile": "npm run compile:truffle && npm run compile:typechain && ./node_modules/.bin/tsc",
     "truffle:server": "ganache-cli -l 8000000",
     "truffle:migrate": "cd ./blockchain && truffle migrate --network testrpc",
     "truffle:test": "cd ./blockchain/ && truffle test --network testrpc",
@@ -21,13 +22,16 @@
   "author": "Micah Riggan",
   "license": "MIT",
   "devDependencies": {
-    "@types/node": "^10.9.4",
-    "@types/web3": "^1.0.4",
+    "@types/node": "^10.12.2",
+    "@types/request-promise": "^4.1.42",
+    "@types/web3": "^1.0.12",
     "truffle": "^4.1.14",
+    "typechain": "^0.3.8",
     "typescript": "^3.0.3"
   },
   "dependencies": {
-    "web3": "^1.0.0-beta.36",
-    "smart-contracts-client": "1.0.0"
+    "request-promise": "^4.2.2",
+    "service-registry-client": "1.0.0",
+    "web3": "^1.0.0-beta.36"
   }
 }

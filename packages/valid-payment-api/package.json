@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npm run compile && node ./ts_build/index.js",
     "compile": "./node_modules/.bin/tsc",
-    "test": "cd ./blockchain/ && truffle test --network testrpc",
+    "test": "./node_modules/.bin/mocha -r ts-node/register test/**/*.spec.ts",
     "testrpc": "./node_modules/.bin/ganache-cli"
   },
   "author": "",
@@ -14,15 +14,20 @@
   "dependencies": {
     "express": "^4.16.3",
     "service-registry-client": "1.0.0",
-    "smart-contracts-client": "1.0.0",
+    "smart-contracts-api": "1.0.0",
     "valid-payment-client": "1.0.0",
     "web3": "^1.0.0-beta.36"
   },
   "devDependencies": {
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.5",
     "@types/web3": "^1.0.4",
+    "chai": "^4.2.0",
     "ganache-cli": "^6.1.8",
+    "mocha": "^5.2.0",
     "prettier": "^1.14.2",
     "truffle": "^4.1.14",
+    "ts-node": "^7.0.1",
     "typescript": "^3.0.3"
   }
 }

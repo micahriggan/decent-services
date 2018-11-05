@@ -1,5 +1,5 @@
 import Web3 = require('web3');
-import { SmartContractsClient } from 'smart-contracts-client';
+import { SmartContractsClient } from 'smart-contracts-api';
 import { Signature } from 'web3/eth/accounts';
 const smartContractClient = new SmartContractsClient();
 let web3 = new Web3();

@@ -1,8 +1,10 @@
 import express = require('express');
+import cors = require('cors');
 import { Service, EnvConstants, DecentEnvClient } from 'service-registry-client';
 import { DecentEnvProvider } from './services/service-provider';
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 const provider = new DecentEnvProvider();
 

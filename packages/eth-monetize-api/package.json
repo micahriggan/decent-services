@@ -5,25 +5,23 @@
   "main": "index.js",
   "scripts": {
     "start": "npm run compile && node ./ts_build/index.js",
-    "compile": "./node_modules/.bin/tsc",
-    "test": "cd ./blockchain/ && truffle test --network testrpc",
-    "testrpc": "./node_modules/.bin/ganache-cli"
+    "compile": "./node_modules/.bin/tsc"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "crypto-markets-client": "1.0.0",
-    "service-registry-client": "1.0.0",
     "eth-monetize-client": "1.0.0",
     "express": "^4.16.3",
+    "service-registry-client": "1.0.0",
     "valid-payment-client": "1.0.0",
     "web3": "^1.0.0-beta.36"
   },
   "devDependencies": {
-    "@types/web3": "^1.0.3",
+    "@types/cors": "^2.8.4",
     "@types/express": "^4.16.0",
-    "ganache-cli": "^6.1.8",
-    "truffle": "^4.1.14",
+    "@types/web3": "^1.0.3",
     "typescript": "^3.0.3"
   }
 }

@@ -1,6 +1,5 @@
 import request = require('request-promise');
 import { BaseClient } from 'service-registry-client';
-export * from './contracts';
 
 export type ApiContract = {
   spec: any;
@@ -23,3 +22,4 @@ export class SmartContractsClient extends BaseClient {
     return resp as ApiContract;
   }
 }
+

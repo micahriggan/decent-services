@@ -17,7 +17,7 @@
   "license": "MIT",
   "dependencies": {
     "web3": "^1.0.0-beta.36",
-    "smart-contracts-client": "1.0.0"
+    "smart-contracts-api": "1.0.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.2",

@@ -1,9 +1,8 @@
 import express = require('express');
 import Web3 = require('web3');
-import { ContractsObj, ApiContract,  SmartContractsClient } from 'smart-contracts-client';
-
-const client = new SmartContractsClient();
-const app = express();
+import { ContractsObj, SmartContractsClient } from './client';
+export * from './client';
+export * from './utils/PaymentValidator';
 
 export const SmartContracts: ContractsObj = {
   PaymentValidator: {
@@ -16,14 +15,19 @@ export const SmartContracts: ContractsObj = {
   }
 };
 
-app.get('/contracts', (req, res) => {
-  res.send(SmartContracts);
-});
+if (require.main === module) {
+  const client = new SmartContractsClient();
+  const app = express();
 
-app.get('/contracts/:contractName', (req, res) => {
-  res.send(SmartContracts[req.params.contractName]);
-});
+  app.get('/contracts', (req, res) => {
+    res.send(SmartContracts);
+  });
 
-client.register().then(service => {
-  app.listen(service.port);
-});
+  app.get('/contracts/:contractName', (req, res) => {
+    res.send(SmartContracts[req.params.contractName]);
+  });
+
+  client.register().then(service => {
+    app.listen(service.port);
+  });
+}

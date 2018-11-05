@@ -1,6 +1,6 @@
 import express = require('express');
 import { EnvConstants } from 'service-registry-client';
-import { SmartContractsClient, PaymentValidatorUtil } from 'smart-contracts-client';
+import { SmartContractsClient, PaymentValidatorUtil } from 'smart-contracts-api';
 import { ValidPaymentClient } from 'valid-payment-client';
 
 import Web3 = require('web3');
@@ -9,13 +9,11 @@ const smartContractsClient = new SmartContractsClient();
 
 web3.eth.getAccounts(async (err, accounts) => {
   const contract = await smartContractsClient.getContract('PaymentValidator');
-  console.log(contract);
   const validatorUtil = new PaymentValidatorUtil(contract.spec.abi, contract.address);
   const api = express();
   const client = new ValidPaymentClient();
 
   const data = await smartContractsClient.getContract('PaymentValidator');
-  console.log(data);
   const PaymentValidator = new web3.eth.Contract(data.spec.abi, data.address);
 
   api.get('/quote/:wei/:data', async (req, res) => {

@@ -9,8 +9,8 @@
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "target": "es5",
-    "typeRoots": ["./node_modules/@types"],
+    "target": "es6",
+    "typeRoots": ["./node_modules/@types", "./types"],
     "baseUrl": ".",
     "paths": {
       "*": ["*", "./src/*"]
@@ -20,7 +20,8 @@
   },
   "include": [
     "./src/**/*.ts",
-    "./tests/**/*.ts"
+    "./tests/**/*.ts",
+    "./types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

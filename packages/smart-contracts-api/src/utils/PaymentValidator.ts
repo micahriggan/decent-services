@@ -1,8 +1,8 @@
 import Web3 = require('web3');
-const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
+const wssWeb3 = new Web3(new Web3.providers.WebsocketProvider('ws://localhost:8545'));
 export class PaymentValidatorUtil {
   private contract;
-  constructor(abi, address?: string) {
+  constructor(abi, address?: string, private web3: Web3 = wssWeb3) {
     this.contract = new web3.eth.Contract(abi, address);
   }
 
@@ -37,12 +37,12 @@ export class PaymentValidatorUtil {
   }
 
   hashMessage(messageArr) {
-    return web3.utils.soliditySha3(...messageArr);
+    return this.web3.utils.soliditySha3(...messageArr);
   }
 
   async signHash(hash) {
     const signingAddress = await this.contract.methods.quoteSigner().call();
-    return web3.eth.sign(hash, signingAddress);
+    return this.web3.eth.sign(hash, signingAddress);
   }
 
   async makeInvoice(wei, data = '') {
@@ -63,7 +63,7 @@ export class PaymentValidatorUtil {
     const sig = signedHash.slice(2);
     const r = `0x${sig.slice(0, 64)}`;
     const s = `0x${sig.slice(64, 128)}`;
-    const v = web3.utils.toDecimal(sig.slice(128, 130)) + 27;
+    const v = this.web3.utils.toDecimal(sig.slice(128, 130)) + 27;
     return { hash, signedHash, amount, expiration, payload, payloadHash, v, r, s };
   }
 
