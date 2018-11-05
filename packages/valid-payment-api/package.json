@@ -2,9 +2,9 @@
   "name": "valid-payment-api",
   "version": "1.0.0",
   "description": "sign messages defining a valid payment",
-  "main": "index.js",
+  "main": "ts_build/src/index.js",
   "scripts": {
-    "start": "npm run compile && node ./ts_build/index.js",
+    "start": "npm run compile && node ./ts_build/src/index.js",
     "compile": "./node_modules/.bin/tsc",
     "test": "./node_modules/.bin/mocha -r ts-node/register test/**/*.spec.ts",
     "testrpc": "./node_modules/.bin/ganache-cli"
