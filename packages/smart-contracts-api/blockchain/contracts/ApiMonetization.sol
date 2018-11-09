@@ -28,12 +28,13 @@ contract ApiMonetization {
     bytes32 hash,
     uint8 v,
     bytes32 r,
-    bytes32 s
+    bytes32 s,
+    address tokenContract
   ) public payable
   {
     bytes32 ourHash = keccak256(abi.encodePacked(nonce, numCalls));
     require(ourHash == payload, "Mismatch between hash of number of calls and user input");
-    require(validator.validatePayment(msg.value, expiration, payload, hash, v, r, s), "Payment must be valid");
+    require(validator.validatePayment(msg.value, expiration, payload, hash, v, r, s, tokenContract), "Payment must be valid");
     emit ApiPurchase(signingKey, msg.sender, msg.value);
     purchases[signingKey] = numCalls;
   }

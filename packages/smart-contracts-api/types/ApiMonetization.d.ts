@@ -28,7 +28,8 @@ export class ApiMonetization {
       hash: string | number[],
       v: number | string,
       r: string | number[],
-      s: string | number[]
+      s: string | number[],
+      tokenContract: string
     ): TransactionObject<void>;
 
     validator(): TransactionObject<string>;

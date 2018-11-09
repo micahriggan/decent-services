@@ -7,59 +7,45 @@ import { Callback, EventLog } from "web3/types";
 import { EventEmitter } from "events";
 import { Provider } from "web3/providers";
 
-export class PaymentValidator {
+export class IERC20 {
   constructor(jsonInterface: any[], address?: string, options?: CustomOptions);
   _address: string;
   options: contractOptions;
   methods: {
-    isValidPayment(
-      value: number | string,
-      expiration: number | string,
-      payload: string | number[],
-      hash: string | number[],
-      v: number | string,
-      r: string | number[],
-      s: string | number[],
-      tokenContract: string
+    balanceOf(tokenOwner: string): TransactionObject<string>;
+
+    allowance(tokenOwner: string, spender: string): TransactionObject<string>;
+
+    transfer(to: string, tokens: number | string): TransactionObject<boolean>;
+
+    approve(
+      spender: string,
+      tokens: number | string
     ): TransactionObject<boolean>;
 
-    validatePayment(
-      value: number | string,
-      expiration: number | string,
-      payload: string | number[],
-      hash: string | number[],
-      v: number | string,
-      r: string | number[],
-      s: string | number[],
-      tokenContract: string
+    transferFrom(
+      from: string,
+      to: string,
+      tokens: number | string
     ): TransactionObject<boolean>;
 
-    pay(
-      value: number | string,
-      expiration: number | string,
-      payload: string | number[],
-      hash: string | number[],
-      v: number | string,
-      r: string | number[],
-      s: string | number[],
-      tokenContract: string
-    ): TransactionObject<void>;
-
-    withdraw(tokenContract: string): TransactionObject<void>;
-
-    setSigner(newQuoteSigner: string): TransactionObject<void>;
-
-    setAdmin(newAdmin: string): TransactionObject<void>;
-
-    owner(): TransactionObject<string>;
-    quoteSigner(): TransactionObject<string>;
+    totalSupply(): TransactionObject<string>;
   };
   deploy(options: {
     data: string;
     arguments: any[];
   }): TransactionObject<Contract>;
   events: {
-    PaymentAccepted(
+    Transfer(
+      options?: {
+        filter?: object;
+        fromBlock?: BlockType;
+        topics?: string[];
+      },
+      cb?: Callback<EventLog>
+    ): EventEmitter;
+
+    Approval(
       options?: {
         filter?: object;
         fromBlock?: BlockType;

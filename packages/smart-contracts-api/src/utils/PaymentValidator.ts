@@ -76,8 +76,8 @@ export class PaymentValidatorUtil {
     });
   }
 
-  isValidPayment({ hash, signedHash, amount, expiration, nonce, v, r, s }) {
-    const isValid = this.contract.methods.isValidPayment(amount, expiration, nonce, hash, v, r, s).call();
+  isValidPayment({ hash, signedHash, amount, expiration, nonce, v, r, s, tokenContract }) {
+    const isValid = this.contract.methods.isValidPayment(amount, expiration, nonce, hash, v, r, s, tokenContract).call();
     return isValid;
   }
 }
