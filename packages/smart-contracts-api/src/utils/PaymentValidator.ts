@@ -1,12 +1,13 @@
 import Web3 = require('web3');
 const wssWeb3 = new Web3(new Web3.providers.WebsocketProvider('ws://localhost:8545'));
+const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 export class PaymentValidatorUtil {
   private contract;
   constructor(abi, address?: string, private web3: Web3 = wssWeb3) {
     this.contract = new web3.eth.Contract(abi, address);
   }
 
-  createMessage({ amount, expiration, payloadHash }) {
+  createMessage({ amount, expiration, payloadHash, tokenContract }) {
     return [
       {
         t: 'uint',
@@ -19,6 +20,10 @@ export class PaymentValidatorUtil {
       {
         t: 'bytes32',
         v: payloadHash
+      },
+      {
+        t: 'address',
+        v: tokenContract
       }
     ];
   }
@@ -45,7 +50,7 @@ export class PaymentValidatorUtil {
     return this.web3.eth.sign(hash, signingAddress);
   }
 
-  async makeInvoice(wei, data = '') {
+  async makeInvoice(amount, { data = '0', tokenContract = ZERO_ADDRESS } = {}) {
     const nonce = Math.ceil(100000000000 * Math.random());
     const dataStr = parseInt(data, 10).toString();
     const payload = { nonce, dataStr };
@@ -55,8 +60,7 @@ export class PaymentValidatorUtil {
     const minutes = 60;
     const seconds = 60;
     const expiration = new Date().getTime() + 20 * minutes * seconds * 1000;
-    const amount = wei;
-    const message = this.createMessage({ amount, expiration, payloadHash });
+    const message = this.createMessage({ amount, expiration, payloadHash, tokenContract });
     const hash = this.hashMessage(message);
     const signedHash = await this.signHash(hash);
 
@@ -64,7 +68,7 @@ export class PaymentValidatorUtil {
     const r = `0x${sig.slice(0, 64)}`;
     const s = `0x${sig.slice(64, 128)}`;
     const v = this.web3.utils.toDecimal(sig.slice(128, 130)) + 27;
-    return { hash, signedHash, amount, expiration, payload, payloadHash, v, r, s };
+    return { hash, signedHash, amount, expiration, payload, payloadHash, v, r, s, tokenContract };
   }
 
   watchForPayment(cb) {
@@ -77,7 +81,9 @@ export class PaymentValidatorUtil {
   }
 
   isValidPayment({ hash, signedHash, amount, expiration, nonce, v, r, s, tokenContract }) {
-    const isValid = this.contract.methods.isValidPayment(amount, expiration, nonce, hash, v, r, s, tokenContract).call();
+    const isValid = this.contract.methods
+      .isValidPayment(amount, expiration, nonce, hash, v, r, s, tokenContract)
+      .call();
     return isValid;
   }
 }

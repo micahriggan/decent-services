@@ -1,5 +1,6 @@
 const PaymentValidator = artifacts.require('../contracts/PaymentValidator.sol');
-const { PaymentValidatorUtil } = require('smart-contracts-client');
+const TestToken = artifacts.require('../contracts/TestToken.sol');
+const { PaymentValidatorUtil } = require('../../ts_build/utils/PaymentValidator.js');
 const spec = require('../build/contracts/PaymentValidator.json');
 const Web3 = require('web3');
 
@@ -25,18 +26,38 @@ contract('PaymentValidator', (accounts) => {
     const contract = await PaymentValidator.deployed();
     const validator = new PaymentValidatorUtil(spec.abi, contract.address);
     const invoice = await validator.makeInvoice(10);
-    const { expiration, payloadHash, hash, v, r, s, amount } = invoice;
-    let tx = await contract.pay(expiration, payloadHash, hash, v, r, s, {from: accounts[2], value: 10});
+    const { amount, expiration, payloadHash, hash, v, r, s, tokenContract } = invoice;
+    let tx = await contract.pay(amount, expiration, payloadHash, hash, v, r, s, tokenContract, {from: accounts[2], value: 10});
     assert(tx.logs[0].event === 'PaymentAccepted');
   });
+
+  it('should be able to pay an ERC20 invoice', async () => {
+    // Only account 0 has a token balance
+    // After the test, the contract should have a token balance equal to the amount paid
+    const contract = await PaymentValidator.deployed();
+    const token = await TestToken.deployed();
+    const validator = new PaymentValidatorUtil(spec.abi, contract.address);
+    const invoice = await validator.makeInvoice(10, {tokenContract: token.address});
+    const { amount, expiration, payloadHash, hash, v, r, s, tokenContract } = invoice;
+    const tokenBalanceBefore = await token.balanceOf(contract.address);
+    assert(tokenBalanceBefore >= 0, "Should have a balance of zero or higher");
+    await token.approve(contract.address, 10);
+    let tx = await contract.pay(amount, expiration, payloadHash, hash, v, r, s, tokenContract, {from: accounts[0], value: 10});
+    const tokenBalanceAfter = await token.balanceOf(contract.address);
+    const tokenBalanceDiff = tokenBalanceAfter - tokenBalanceBefore;
+    assert(tokenBalanceAfter > tokenBalanceBefore, "Balance should increase");
+    assert(tokenBalanceDiff == amount, "Balance should equal amount of invoice");
+    assert(tx.logs[0].event === 'PaymentAccepted');
+  });
+
 
   it('should not be able to pay a wrong value', async () => {
     const contract = await PaymentValidator.deployed();
     const validator = new PaymentValidatorUtil(spec.abi, contract.address);
     const invoice = await validator.makeInvoice(10);
-    const { expiration, payloadHash, hash, v, r, s, amount } = invoice;
+    const { amount, expiration, payloadHash, hash, v, r, s, tokenContract } = invoice;
     try {
-      const tx = await contract.pay(expiration, payloadHash, hash, v, r, s, {from: accounts[2], value: 1});
+      const tx = await contract.pay(amount, expiration, payloadHash, hash, v, r, s, tokenContract, {from: accounts[2], value: 1});
       assert(tx == null, "This payment should have failed");
     } catch(err) {
       assert(err.message.includes('revert'), "This payment should fail");
@@ -55,8 +76,8 @@ contract('PaymentValidator', (accounts) => {
     });
 
     const invoice = await validator.makeInvoice(10);
-    const { expiration, payloadHash, hash, v, r, s, amount } = invoice;
-    let tx = await contract.pay(expiration, payloadHash, hash, v, r, s, {from: accounts[2], value: 10});
+    const { amount, expiration, payloadHash, hash, v, r, s, tokenContract } = invoice;
+    let tx = await contract.pay(amount, expiration, payloadHash, hash, v, r, s, tokenContract, {from: accounts[2], value: 10});
     assert.equal(tx.logs[0].event, 'PaymentAccepted');
 
     const payment = await PaymentEvent;

@@ -1,7 +1,8 @@
+const Web3 = require('web3');
 const ApiMonetization = artifacts.require('../contracts/ApiMonetization.sol');
 const monetizeSpec = require('../build/contracts/ApiMonetization.json');
 const validateSpec = require('../build/contracts/PaymentValidator.json');
-const { PaymentValidatorUtil } = require('smart-contracts-client');
+const { PaymentValidatorUtil } = require('../../ts_build/utils/PaymentValidator');
 
 
 
@@ -12,17 +13,19 @@ contract('ApiMonetization', (accounts) => {
   const payer = accounts[2];
   const signingKey = accounts[3];
 
-  after(() => {
-    /*
-     *web3.setProvider(new Web3.providers.HttpProvider("http://localhost:8545"));
-     */
+  before(() => {
+    web3.setProvider(new Web3.providers.HttpProvider("http://localhost:8545"));
   });
 
+  after(() => {
+    web3.setProvider(new Web3.providers.HttpProvider("http://localhost:8545"));
+  });
 
 
   it(`should be able to get a signed quote for ${purchaseAmount} api calls`, async () => {
     const instance = await ApiMonetization.deployed();
     const validatorAddr = await instance.validator.call();
+    console.log(validatorAddr);
     const validator = new PaymentValidatorUtil(validateSpec.abi, validatorAddr);
     const signedQuote = await validator.makeInvoice(totalWei, purchaseAmount);
     assert(signedQuote != null, "We should be able to get a quote");

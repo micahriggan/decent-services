@@ -69,7 +69,7 @@ contract PaymentValidator {
       require(validatePayment(msg.value, expiration, payload, hash, v, r, s, tokenContract), "Only accept valid payments");
     } else {
       IERC20 token = IERC20(tokenContract);
-      require(token.allowance(msg.sender, address(this)) > value, "Must have enough tokens to pay");
+      require(token.allowance(msg.sender, address(this)) >= value, "Must have enough tokens to pay");
       require(validatePayment(value, expiration, payload, hash, v, r, s, tokenContract), "Only accept valid payments");
       require(token.transferFrom(msg.sender, address(this), value), "Transfer must succeed");
     }
@@ -80,6 +80,7 @@ contract PaymentValidator {
     require(msg.sender == owner, "Must be the contract owner");
     _;
   }
+
   function withdraw(address tokenContract) public isAdmin {
     if(tokenContract == 0x0) {
       owner.transfer(address(this).balance);
@@ -89,6 +90,7 @@ contract PaymentValidator {
       require(token.transfer(owner, balance), "Must succeed withdrawing tokens");
     }
   }
+
   function setSigner(address newQuoteSigner) public isAdmin {
     quoteSigner = newQuoteSigner;
   }

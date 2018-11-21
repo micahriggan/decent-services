@@ -1,7 +1,7 @@
 #!/bin/bash
 echo "Cleaning build files"
 rm -rf ./blockchain/build
-migrate_msg=$(cd ./blockchain && truffle migrate --network testrpc)
+migrate_msg=$(cd ./blockchain && truffle migrate)
 echo "$migrate_msg"
 
 export PaymentValidator=$(echo "$migrate_msg" | grep "PaymentValidator: " | cut -f 4 -d " ")
