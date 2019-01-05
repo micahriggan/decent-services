@@ -27,4 +27,8 @@ export class DecentEnvProvider {
   get(serviceName) {
     return DecentServices[serviceName];
   }
+
+  all() {
+    return DecentServices;
+  }
 }

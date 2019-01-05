@@ -5,6 +5,7 @@
   "main": "ts_build/src/index.js",
   "scripts": {
     "start": "npm run compile && node ./ts_build/src/index.js",
+    "api:start": "npm run start",
     "compile": "./node_modules/.bin/tsc",
     "test": "./node_modules/.bin/mocha -r ts-node/register test/**/*.spec.ts",
     "testrpc": "./node_modules/.bin/ganache-cli"

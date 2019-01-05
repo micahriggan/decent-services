@@ -12,6 +12,11 @@ app.get('/ping', (req, res) => {
   res.send({ msg: 'pong' });
 });
 
+app.get('/', (req, res) => {
+  const payload = provider.all();
+  res.send(payload);
+});
+
 app.get('/service/:serviceName', (req, res) => {
   const { serviceName } = req.params;
   const payload = provider.get(serviceName);

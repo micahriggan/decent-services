@@ -1,3 +1,3 @@
 #!/bin/bash 
 ./build.sh
-lerna run start --parallel
+lerna run api:start --parallel

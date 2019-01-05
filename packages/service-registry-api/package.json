@@ -7,6 +7,7 @@
   "scripts": {
     "compile": "./node_modules/.bin/tsc",
     "start": "npm run compile && node ./ts_build/index.js",
+    "api:start": "npm run start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Micah Riggan",

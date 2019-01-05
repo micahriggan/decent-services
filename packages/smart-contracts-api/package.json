@@ -6,6 +6,7 @@
   "types": "./ts_build/index.d.ts",
   "scripts": {
     "start": "npm run compile && ./start.sh",
+    "api:start": "npm run start",
     "compile:truffle": "cd ./blockchain && truffle compile",
     "compile:typechain": "./node_modules/.bin/typechain --outDir ./types --target=web3-1.0.0 './blockchain/build/contracts/*.json'",
     "compile": "npm run compile:truffle && npm run compile:typechain && ./node_modules/.bin/tsc",
