@@ -3,18 +3,9 @@ var SplitCoin = artifacts.require('./ClaimableSplitCoin.sol');
 var splitcoinJson = require('../build/contracts/ClaimableSplitCoin.json');
 const Web3 = require('web3');
 
-/*var TestRPC = require("ethereumjs-testrpc");*/
-/*web3.setProvider(TestRPC.provider());*/
-
 contract('SplitCoin', (accounts) => {
-
-  before(() => {
-    web3.setProvider(new Web3.providers.HttpProvider("http://localhost:8545"));
-  });
-
-  after(() => {
-    web3.setProvider(new Web3.providers.HttpProvider("http://localhost:8545"));
-  });
+  const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+  const wssWeb3 = new Web3(new Web3.providers.WebsocketProvider("ws://localhost:8545"));
 
   let splitCoinContractAddr = null;
   let splitCoinContract = null;
@@ -40,7 +31,7 @@ contract('SplitCoin', (accounts) => {
       splitData.ppm = split[1];
       splitCoinSplits.push(splitData);
       assert.equal(split != null, true, "There should be a split at index 1");
-      assert.equal(splitData.to, accounts[index], "The contract should have the user at index 1");
+      assert.equal(splitData.to.toLowerCase(), accounts[index].toLowerCase(), "The contract should have the user at index 1");
       assert.equal(splitData.ppm < 1000000, true, "The user should get less than the whole amount (dev_fee)");
       assert.equal(splitData.ppm > 400000, true, "The user should get almost half");
     }
@@ -48,18 +39,15 @@ contract('SplitCoin', (accounts) => {
 
   it("should send the ether to 3 accounts, dev, acc1, acc2", async () => {
     let sendAmount = web3.utils.toWei('1', "ether");
-    web3 = new Web3(new Web3.providers.WebsocketProvider("http://localhost:8545"));
-    const contract = new web3.eth.Contract( splitcoinJson.abi, splitCoinContractAddr);
+    const contract = new wssWeb3.eth.Contract( splitcoinJson.abi, splitCoinContractAddr);
     let found = [];
     let sumSent = 0;
     const events = new Promise((resolve) => {
-      let splitEvent = contract.events.SplitTransfer({fromBlock: "latest",
-        to: "pending"
-      }, (err, eventRes) => {
-        console.log(`${eventRes.event}: ${eventRes.returnValues.amount} to ${eventRes.returnValues.to}`);
-        sumSent += Number(eventRes.returnValues.amount);
+      let splitEvent = contract.events.SplitTransfer({}, (err, res) => {
+        console.log(`${res.event}: ${res.returnValues.amount} to ${res.returnValues.to}`);
+        sumSent += Number(res.returnValues.amount);
         for (let split of splitCoinSplits) {
-          if (eventRes.returnValues.to == split.to && found.indexOf(split.to) == -1) {
+          if (res.returnValues.to == split.to && found.indexOf(split.to) == -1) {
             found.push(split.to);
           }
         }

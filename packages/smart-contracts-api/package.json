@@ -11,8 +11,8 @@
     "compile:typechain": "./node_modules/.bin/typechain --outDir ./types --target=web3-1.0.0 './blockchain/build/contracts/*.json'",
     "compile": "npm run compile:truffle && npm run compile:typechain && ./node_modules/.bin/tsc",
     "truffle:server": "ganache-cli -l 8000000",
-    "truffle:migrate": "cd ./blockchain && truffle migrate --network testrpc",
-    "truffle:test": "cd ./blockchain/ && ../node_modules/.bin/darq-truffle test --network testrpc",
+    "truffle:migrate": "cd ./blockchain && truffle migrate",
+    "truffle:test": "cd ./blockchain/ && ../node_modules/.bin/truffle test",
     "test": "npm run truffle:test"
   },
   "keywords": [
@@ -26,7 +26,6 @@
     "@types/node": "^10.12.2",
     "@types/request-promise": "^4.1.42",
     "@types/web3": "^1.0.12",
-    "darq-truffle": "^4.1.9-latest.0",
     "truffle": "^4.1.14",
     "typechain": "^0.3.8",
     "typescript": "^3.0.3"

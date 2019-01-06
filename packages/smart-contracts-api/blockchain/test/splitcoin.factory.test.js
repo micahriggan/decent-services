@@ -3,10 +3,8 @@ var SplitCoin = artifacts.require('./ClaimableSplitCoin.sol');
 var splitcoinJson = require('../build/contracts/ClaimableSplitCoin.json');
 const Web3 = require('web3');
 
-/*var TestRPC = require("ethereumjs-testrpc");*/
-/*web3.setProvider(TestRPC.provider());*/
-
 contract('SplitCoinFactory', (accounts) => {
+  const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
   let splitCoinSplits = [];
 
   it("should deploy a contract with two splits for correct gas cost", () => {
@@ -53,7 +51,7 @@ contract('SplitCoinFactory', (accounts) => {
           splitData.ppm = split[1];
           splitCoinSplits.push(splitData);
           assert.equal(split != null, true, "There should be a split at index 1");
-          assert.equal(splitData.to, accounts[index], "The contract should have the user at index 1");
+          assert.equal(splitData.to.toLowerCase(), accounts[index].toLowerCase(), "The contract should have the user at index 1");
           assert.equal(splitData.ppm < 1000000, true, "The user should get less than the whole amount (dev_fee)");
           assert.equal(splitData.ppm > 400000, true, "The user should get almost half");
         }
@@ -86,7 +84,7 @@ contract('SplitCoinFactory', (accounts) => {
         splitData.to = split[0];
         splitData.ppm = split[1];
         assert.equal(split != null, true, "There should be a split at index 1");
-        assert.equal(splitData.to, accounts[0], "The contract should have the user at index 1");
+        assert.equal(splitData.to.toLowerCase(), accounts[0].toLowerCase(), "The contract should have the user at index 1");
         assert.equal(splitData.ppm < 1000000, true, "The user should get less than the whole amount (dev_fee)");
         assert.equal(splitData.ppm > 900000, true, "The user should get more than 90%");
       });

@@ -1,10 +1,15 @@
 import Web3 = require('web3');
-const wssWeb3 = new Web3(new Web3.providers.WebsocketProvider('ws://localhost:8545'));
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 export class PaymentValidatorUtil {
   private contract;
-  constructor(abi, address?: string, private web3: Web3 = wssWeb3) {
-    this.contract = new web3.eth.Contract(abi, address);
+  private web3: Web3;
+  private wssWeb3: Web3;
+  constructor(abi, address?: string, web3?: Web3) {
+    this.web3 =
+      web3 && web3.currentProvider
+        ? new Web3(web3.currentProvider)
+        : new Web3(new Web3.providers.WebsocketProvider('ws://localhost:8545'));
+    this.contract = new this.web3.eth.Contract(abi, address);
   }
 
   createMessage({ amount, expiration, payloadHash, tokenContract }) {

@@ -5,18 +5,10 @@ const spec = require('../build/contracts/PaymentValidator.json');
 const Web3 = require('web3');
 
 contract('PaymentValidator', (accounts) => {
-
-  before(() => {
-    web3.setProvider(new Web3.providers.HttpProvider("http://localhost:8545"));
-  });
-
-  after(() => {
-    web3.setProvider(new Web3.providers.HttpProvider("http://localhost:8545"));
-  });
-
+  const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 
   it('should be able to generate an invoice', async () => {
-    const contract = await PaymentValidator.deployed();
+    const contract = await PaymentValidator.new(accounts[1], {from: accounts[0]});
     const validator = new PaymentValidatorUtil(spec.abi, contract.address);
     const invoice = await validator.makeInvoice(10);
     assert(invoice != null, "An invoice was not created");
@@ -65,14 +57,11 @@ contract('PaymentValidator', (accounts) => {
   });
 
   it('should trigger the PaymentAccepted event', async() => {
-    web3 = new Web3(new Web3.providers.WebsocketProvider("http://localhost:8545"));
     const contract = await PaymentValidator.deployed();
     const validator = new PaymentValidatorUtil(spec.abi, contract.address);
     const web3Contract = new web3.eth.Contract(spec.abi, contract.address);
     const PaymentEvent = new Promise((resolve) => {
-      web3Contract.events.PaymentAccepted({}, (err, resp) => {
-        resolve(resp);
-      });
+      validator.watchForPayment((err, data) => resolve(data));
     });
 
     const invoice = await validator.makeInvoice(10);

@@ -3,29 +3,18 @@ var SplitCoin = artifacts.require('./ClaimableSplitCoin.sol');
 var splitcoinJson = require('../build/contracts/ClaimableSplitCoin.json');
 var Web3 = require('web3');
 
-/*var TestRPC = require("ethereumjs-testrpc");*/
-/*web3.setProvider(TestRPC.provider());*/
-
 contract('ClaimableSplitCoin', accounts => {
+  const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+  const wssWeb3 = new Web3(new Web3.providers.WebsocketProvider("ws://localhost:8545"));
+
   let splitCoinContractAddr = null;
   let splitCoinSplits = [];
   let factory = null;
-
-  before(() => {
-    web3.setProvider(new Web3.providers.HttpProvider("http://localhost:8545"));
-  });
-
-  after(() => {
-    web3.setProvider(new Web3.providers.HttpProvider("http://localhost:8545"));
-  });
-
-
 
   it('should be able to deploy a ClaimableSplitCoin via factory', () => {
     return SplitCoinFactory.deployed()
       .then(splitFactory => {
         factory = splitFactory;
-        let accounts = web3.eth.accounts;
         const MILLION = 1000000;
         let half = MILLION / 2;
         return factory.make(
@@ -40,17 +29,17 @@ contract('ClaimableSplitCoin', accounts => {
       })
       .then(splitCoinAddr => {
         splitCoinContractAddr = splitCoinAddr;
-        return new web3.eth.contract(splitcoinJson.abi, splitCoinAddr);
+        return SplitCoin.at(splitCoinAddr);
       })
-      .then(async splitCoin => {
+      .then(splitCoin => {
         assert.equal(
           splitCoin != null,
           true,
           'The splitCoin should be defined'
         );
         return Promise.all([
-          await splitCoin.splits(1),
-          await splitCoin.splits(2)
+          splitCoin.splits(1),
+          splitCoin.splits(2)
         ]);
       })
       .then(splits => {
@@ -87,9 +76,9 @@ contract('ClaimableSplitCoin', accounts => {
       });
   });
 
-  it('should be cheap to send to this contract', () => {
-    let amount = web3.eth.estimateGas({
-      from: web3.eth.accounts[0],
+  it('should be cheap to send to this contract', async () => {
+    let amount = await web3.eth.estimateGas({
+      from: accounts[0],
       to: splitCoinContractAddr,
       amount: web3.utils.toWei('1', 'ether')
     });
@@ -135,70 +124,64 @@ contract('ClaimableSplitCoin', accounts => {
 
   });
 
-  it('should have a claimable balance for dev, acc1, acc2 equal to 1 ether', done => {
+  it('should have a claimable balance for dev, acc1, acc2 equal to 1 ether', async () => {
     let splitContract = SplitCoin.at(splitCoinContractAddr);
     let sendAmount = web3.utils.toWei('1', 'ether');
-    return web3.eth.sendTransaction(
-      {
-        from: accounts[3],
-        to: splitCoinContractAddr,
-        value: web3.utils.toWei('1', 'ether')
-      },
-      async (err, result) => {
-        let claimable1 = await splitContract.getClaimableBalance({
-          from: accounts[0]
-        });
-        let claimable2 = await splitContract.getClaimableBalance({
-          from: accounts[1]
-        });
+    const result = await web3.eth.sendTransaction({
+      from: accounts[3],
+      to: splitCoinContractAddr,
+      value: web3.utils.toWei('1', 'ether')
+    });
 
-        let developer = await splitContract.developer.call();
-        let devCharge = await splitContract.getClaimableBalance({
-          from: developer
-        });
+    let claimable1 = await splitContract.getClaimableBalance({
+      from: accounts[0]
+    });
 
-        assert.equal(
-          claimable1.toNumber() + claimable2.toNumber() + devCharge.toNumber(),
-          sendAmount
-        );
-        done();
-      }
+    let claimable2 = await splitContract.getClaimableBalance({
+      from: accounts[1]
+    });
+
+    let developer = await splitContract.developer.call();
+    let devCharge = await splitContract.getClaimableBalance({
+      from: developer
+    });
+
+    assert.equal(
+      claimable1.toNumber() + claimable2.toNumber() + devCharge.toNumber(),
+      sendAmount
     );
   });
 
   it('should send the ether to 2 accounts, acc1, acc2', done => {
-    let splitContract = SplitCoin.at(splitCoinContractAddr);
-    let splitEvent = SplitCoin.at(splitCoinContractAddr).SplitTransfer({
-      fromBlock: 'latest',
-      to: 'pending'
-    });
-
+    //let splitContract = SplitCoin.at(splitCoinContractAddr);
+    const splitCoin = new wssWeb3.eth.Contract(splitcoinJson.abi, splitCoinContractAddr);
     let found = [];
-    let filter = splitEvent.watch((err, eventRes) => {
+
+    let splitEvent = splitCoin.events.SplitTransfer({}, (err, eventRes) => {
       console.log(
-        `${eventRes.event}: ${eventRes.args.amount} to ${eventRes.args.to}`
+        `${eventRes.event}: ${eventRes.returnValues.amount} to ${eventRes.returnValues.to}`
       );
       for (let split of splitCoinSplits) {
-        if (eventRes.args.to == split.to && found.indexOf(split.to) == -1) {
-          found.push(split.to);
+        if (eventRes.returnValues.to.toLowerCase() == split.to.toLowerCase() && found.indexOf(split.to) == -1) {
+          found.push(split.to.toLowerCase());
         } else {
-          //console.log('Looking for ', split.to, ' saw: ', eventRes.args.to);
+          //console.log('Looking for ', split.to, ' saw: ', eventRes.returnValues.to);
         }
       }
       if (found.length == 2) {
         assert.equal(true, true, 'Should fire off transfers for the two users');
-        filter.stopWatching();
+        splitEvent.unsubscribe();
         done();
       }
     });
+
     console.log('Waiting for two transfers...');
 
-    splitContract
-      .claim({
+    splitCoin.methods.claim().send({
         from: accounts[0]
       })
       .then(() =>
-        splitContract.claim({
+        splitCoin.methods.claim().send({
           from: accounts[1]
         })
       );
