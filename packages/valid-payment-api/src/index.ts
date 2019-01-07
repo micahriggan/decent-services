@@ -1,4 +1,5 @@
 import express = require('express');
+import cors from 'cors';
 import { EnvConstants } from 'service-registry-client';
 import { SmartContractsClient, PaymentValidatorUtil } from 'smart-contracts-api';
 import { ValidPaymentClient } from 'valid-payment-client';
@@ -11,14 +12,15 @@ web3.eth.getAccounts(async (err, accounts) => {
   const contract = await smartContractsClient.getContract('PaymentValidator');
   const validatorUtil = new PaymentValidatorUtil(contract.spec.abi, contract.address);
   const api = express();
+  api.use(cors());
   const client = new ValidPaymentClient();
 
   const data = await smartContractsClient.getContract('PaymentValidator');
   const PaymentValidator = new web3.eth.Contract(data.spec.abi, data.address);
 
-  api.get('/quote/:wei/:data', async (req, res) => {
+  api.get('/quote/:wei', async (req, res) => {
     console.log('creating invoice quote');
-    const payload = await validatorUtil.makeInvoice(req.params.wei, req.params.data);
+    const payload = await validatorUtil.makeInvoice(req.params.wei, req.query);
     res.send(payload);
   });
 

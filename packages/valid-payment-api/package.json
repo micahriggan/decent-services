@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.16.3",
     "service-registry-client": "1.0.0",
     "smart-contracts-api": "1.0.0",
@@ -21,6 +22,7 @@
   },
   "devDependencies": {
     "@types/chai": "^4.1.7",
+    "@types/cors": "^2.8.4",
     "@types/mocha": "^5.2.5",
     "@types/web3": "^1.0.4",
     "chai": "^4.2.0",

@@ -14,7 +14,7 @@ export class MonetizationService {
     const usdPerEth = etherTicker.ticker.bid;
     const totalEther = totalUsd / usdPerEth;
     const totalWei = web3.utils.toWei(totalEther.toString(), 'ether');
-    const signedQuote = await paymentClient.getQuote(totalWei, callCount);
+    const signedQuote = await paymentClient.getQuote(totalWei, {data: callCount.toString()});
     return { totalWei, totalEther, totalUsd, signedQuote };
   }
 }
