@@ -1,9 +1,11 @@
 # Running
 
 ```
-lerna bootstrap
-lerna run compile
-lerna run start --parallel
+# Have ganache-cli running before starting
+ganache-cli
+
+npm install
+npm start
 ```
 
 
