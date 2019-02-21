@@ -6,6 +6,7 @@ import "./IERC20.sol";
 contract PaymentValidator {
   address public owner;
   address public quoteSigner;
+  mapping(bytes32 => bool) public isPaid;
 
   event PaymentAccepted(bytes32 indexed hash, uint time, uint value);
 
@@ -25,7 +26,7 @@ contract PaymentValidator {
     bytes32 s,
     address tokenContract
   ) public view returns(bool valid) {
-    bool isValid = true;
+    bool isValid = !isPaid[hash];
     isValid = isValid && block.timestamp <= expiration;
     bytes memory prefix = "\x19Ethereum Signed Message:\n32";
     bytes32 ourHash = keccak256(abi.encodePacked(value, expiration, payload, tokenContract));
@@ -45,6 +46,7 @@ contract PaymentValidator {
     bytes32 s,
     address tokenContract
   ) public view returns(bool valid) {
+    require(isPaid[hash] == false, "Already been paid");
     require(block.timestamp <= expiration, "Payment is late");
     bytes memory prefix = "\x19Ethereum Signed Message:\n32";
     bytes32 ourHash = keccak256(abi.encodePacked(value, expiration, payload, tokenContract));
@@ -73,6 +75,7 @@ contract PaymentValidator {
       require(validatePayment(value, expiration, payload, hash, v, r, s, tokenContract), "Only accept valid payments");
       require(token.transferFrom(msg.sender, address(this), value), "Transfer must succeed");
     }
+    isPaid[hash] = true;
     emit PaymentAccepted(hash, block.timestamp, msg.value);
   }
 
