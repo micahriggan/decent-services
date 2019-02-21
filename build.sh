@@ -1,3 +1,3 @@
 #!/bin/bash 
-lerna bootstrap
-lerna run compile
+./node_modules/.bin/lerna bootstrap
+./node_modules/.bin/lerna run compile

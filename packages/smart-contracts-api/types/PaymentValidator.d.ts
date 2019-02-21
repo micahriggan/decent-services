@@ -12,6 +12,8 @@ export class PaymentValidator {
   _address: string;
   options: contractOptions;
   methods: {
+    isPaid(arg0: string | number[]): TransactionObject<boolean>;
+
     isValidPayment(
       value: number | string,
       expiration: number | string,
